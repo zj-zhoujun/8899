@@ -1,0 +1,12 @@
+truncate wym_identity_auth;
+truncate wym_money_log;
+truncate wym_mscode;
+truncate wym_order;
+truncate wym_pig_order;
+truncate wym_tixian;
+truncate wym_user;
+truncate wym_user_payment;
+truncate wym_user_pigs;
+truncate wym_user_relation;
+truncate wym_user_reward;
+truncate wym_yuyue;

@@ -1,0 +1,21 @@
+apache php7.1(redis拓展) mysql5.6  linux
+
+6个任务脚本
+
+http://k.52codes.cn/api/Plan/resetGames 3
+http://k.52codes.cn/api/Plan/test             1
+http://k.52codes.cn/api/Plan/userReward  1
+http://k.52codes.cn/api/Plan/orderCan      1
+http://k.52codes.cn/api/Plan/teamReward  1
+http://k.52codes.cn/api/Plan/orderCon       1
+
+必须有一条公告 否则前台无法打开
+
+
+\application\index\controller/login.php修改短信签名
+
+\application\index\controller/index.php  第78行 修改 激活微分       if($pps>'50'&&$isA==0){
+
+只需要改50为你需要的激活分
+
+宠物设置参考压缩包内的1-2的图片 

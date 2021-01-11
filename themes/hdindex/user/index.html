@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>我的</title>
+    <style>
+
+        html {
+            font-size: 6.25vw!important;
+            overflow: hidden;
+        }
+        .footer, .top_fixed{-webkit-transform: translateZ(0);
+        }
+    </style>
+    <link rel="stylesheet" href="/public/style/assets/css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="https://block-dog.oss-cn-beijing.aliyuncs.com/template/mobile/block/static/css/iconfont.css?v1.1"/>
+    <script src="https://block-dog.oss-cn-beijing.aliyuncs.com/template/mobile/block/static/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <!--<script src="https://block-dog.oss-cn-beijing.aliyuncs.com/template/mobile/block/static/js/mobile-util.js" type="text/javascript" charset="utf-8"></script>-->
+    <script src="https://block-dog.oss-cn-beijing.aliyuncs.com/public/js/global4.js?v1.11"></script>
+    <script src="https://block-dog.oss-cn-beijing.aliyuncs.com/public/js/layer/mobile/layer.js"  type="text/javascript" ></script>
+    <script src="https://block-dog.oss-cn-beijing.aliyuncs.com/public/js/dropload.min.js"></script>
+    <script src="/public/static/index/assets/js/ajaxplugin.js"></script>
+    <script src="https://block-dog.oss-cn-beijing.aliyuncs.com/template/mobile/block/static/js/common14.js?v=1.82"  type="text/javascript" ></script>
+    <meta name="referrer" content="no-referrer">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+
+
+</head>
+<body class="gray">
+
+<style>
+    .my_center_top ,.top_fixed{position:static!important;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;top:unset!important;left:unset!important;
+        z-index:unset!important;
+        -webkit-text-size-adjust: none;
+        -webkit-tap-highlight-color: transparent;}
+    .footer{position:absolute!important;bottom:0px; z-index:unset!important;  -webkit-transform:unset!important; }
+</style>
+<div class="my_center_top" style="padding-top: 1rem;">
+    <a class="setting" href="set.html"><i class="iconfont icon-gongnengjianyi"></i></a>
+    <div class="user_info">
+        <div class="t">
+            <h3>{$user.nickname}<span style="margin-left: .7rem; font-size: .5rem; color:#ffd100;"></span></h3>
+            <p>ID/手机号：{$user.mobile}</p>
+        </div>
+    </div>
+    <div class="account_info">
+        <ul>
+            <li><a href="{:url('pig_currency')}"><h3 style="color:#e1b35f">{$user.pig}</h3><span>ALL/矿链</span></a></li>
+            <li><a href="{:url('doge_money')}"><h3 style="color:#e1b35f">{$user.doge}</h3><span>SZB</span></a></li>
+            <li><a href="{:url('blessings_log')}"><h3 style="color:#e1b35f">{$user.pay_points}</h3><span>电力</span></a></li>
+            <li><a href="{:url('profit_log')}"><h3 style="color:#e1b35f">{$contract_revenue}</h3><span>累计收益</span></a></li>
+            <li><a href="javascript:;"><h3 style="color:#e1b35f">{$user_pigs}</h3><span>总收益</span></a></li>
+            <li><a href="{:url('profit')}"><h3 style="color:#e1b35f">{$user.share_integral+$user.team_integral+$user.zc_integral}</h3><span>推广收益</span></a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="grid_menu2" style="margin-bottom: 0.4rem;">
+    <div class="item">
+        <a href="{:url('adopt_log')}">
+            <i class="iconfont icon-mairu"></i>
+            <h3>抢矿记录</h3>
+        </a>
+    </div>
+    <div class="item">
+        <a href="{:url('transfer_log')}">
+            <i class="iconfont icon-maichu"></i>
+            <h3>转让记录</h3>
+        </a>
+    </div>
+    <div class="item">
+        <a href="{:url('reservation_log')}">
+            <i class="iconfont icon-yiwancheng-"></i>
+            <h3>预约记录</h3>
+        </a>
+    </div>
+</div>
+
+<div class="grid_menu" style="margin-top: 0.1rem;">
+    <div class="item">
+        <a href="{:url('safety_center')}">
+        	<img src="/public/style/assets/images/icon_safety_fill.png" style="width:30px;height:30px;">
+            <h3>安全中心</h3>
+        </a>
+    </div>
+    <div class="item">
+        <a href="javascript:checkAuth();">
+            <img src="/public/style/assets/images/icon_calendar_fill.png" style="width:30px;height:30px;">
+            <h3>实名认证</h3>
+        </a>
+    </div>
+    <div class="item">
+        <a href="{:url('bankcard')}">
+            <img src="/public/style/assets/images/icon_namecard_fill.png" style="width:30px;height:30px;">
+            <h3>我的钱包</h3>
+        </a>
+    </div>
+    <div class="item">
+        <a href="{:url('team')}">
+            <img src="/public/style/assets/images/icon_meeting_fill.png" style="width:30px;height:30px;">
+            <h3>我的团队</h3>
+        </a>
+    </div>
+    <div class="item">
+        <a href="javascript:checkAuthToInvit();">
+           <img src="/public/style/assets/images/icon_newgroup_fill.png" style="width:30px;height:30px;">
+            <h3>邀请好友</h3>
+        </a>
+    </div>
+    <div class="item">
+        <a href="{:url('system_message')}">
+            <img src="/public/style/assets/images/message.png" style="width:30px;height:30px;">
+            <h3>系統消息</h3>
+        </a>
+    </div>
+</div>
+
+
+<style>
+
+    .bgfooter {
+        height: 2.13333rem;
+        background: #1E1E29;
+        position: absolute;display:none;
+
+        bottom: 0;
+        left: 0;
+        width: 100%;
+    }
+
+    @media screen and (min-width: 1300px) {
+        .bgfooter {
+            height: 1.06667rem
+        }
+    }
+
+    .bgfooter ul li {
+        float: left;
+        text-align: center;
+        width: 50%
+    }
+
+    .bgfooter ul li .yello {
+        color: #46B39D
+    }
+
+    .bgfooter ul li a {
+        display: inline-block;
+        cursor: pointer;
+        color: #585858;
+    }
+
+    .bgfooter ul li a .icon {
+        margin-top: .128rem
+    }
+
+    @media screen and (min-width: 1300px) {
+        .bgfooter ul li a .icon {
+            margin-top: .04267rem
+        }
+    }
+
+    .bgfooter ul li a .icon .iconfont {
+        font-size: 1.06667rem
+    }
+
+    @media screen and (min-width: 1300px) {
+        .bgfooter ul li a .icon .iconfont {
+            font-size: .59733rem
+        }
+    }
+
+    .bgfooter ul li a .icon p {
+        font-size: .55467rem;
+        margin-top: .21333rem
+    }
+    .footer ul li{width:33.33%!important}
+    @media screen and (min-width: 1300px) {
+        .bgfooter ul li a .icon p {
+            font-size: .29867rem;
+            margin-top: .08533rem
+        }
+    }
+
+
+</style>
+
+<div class="foohi">
+    <div class="footer" >
+        <ul>
+             <li>
+                <a  href="{:url('index/index')}">
+                    <div class="icon">
+                       <i class="icon-gongneng iconfont"></i>
+                      <p style=" color: #46b39d; ">矿场</p>
+                    </div>
+                </a>
+            </li>
+
+            <li>
+                <a style="color:#fff" href="{:url('service/index')}" >
+                    <div class="icon">
+                        <svg t="1566229307463" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2142" width="22" height="22"><path d="M753.266187 77.352518A270.218129 270.218129 0 0 0 512 230.510504 270.218129 270.218129 0 0 0 270.733813 77.352518C121.480288 77.352518 0 203.105612 0 357.663309c0 240.750504 257.841727 460.431655 498.444892 585.669065a29.467626 29.467626 0 0 0 27.110216 0c240.971511-125.23741 498.444892-344.918561 498.444892-585.669065 0-154.557698-121.480288-280.310791-270.733813-280.310791zM512 884.028777C299.906763 770.431079 58.935252 567.767482 58.935252 357.663309c0-122.06964 95.033094-221.007194 211.798561-221.007194S482.532374 235.741007 482.532374 357.663309a29.467626 29.467626 0 0 0 58.935252 0c0-122.06964 95.033094-221.007194 211.798561-221.007194S965.064748 235.741007 965.064748 357.663309c0 210.104173-240.971511 412.76777-453.064748 526.365468z" fill="#46b39d" p-id="2143"></path><path d="M706.633669 451.591367L512 656.686043 317.366331 451.591367a29.467626 29.467626 0 1 0-42.728058 40.517986L490.635971 719.746763a29.467626 29.467626 0 0 0 42.728058 0l215.997698-227.63741a29.467626 29.467626 0 1 0-42.728058-40.517986z" fill="#46b39d" p-id="2144"></path></svg>
+                        <p style=" color: #46b39d; ">客服</p>
+                    </div>
+                </a>
+            </li>
+
+            <li>
+                <a href="{:url('user/index')}" class="yello">
+                    <div class="icon">
+                        <i class="icon-my iconfont" style=" color: #fff; "></i>
+                        <p style=" color: #fff; ">我的</p>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+</div>
+
+
+
+
+
+<script>
+
+
+    function checkAuth(){
+        local_ajax('/index/User/isAuthApi',{},'get',function (res) {
+            if(res.data.hasBank == 1){
+                if(res.data.isStatus == 1){
+                    layer.open({
+                        content: '你已经认证过了!'
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                    })
+                }else if(res.data.isStatus == 0){
+                    layer.open({
+                        content: '實名審核中!'
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                    })
+                }else{
+                    window.location.href="{:url('authentication')}";
+                }
+            }else{
+                layer.open({
+                    content: '請先在我的錢包中添加銀行卡!'
+                    ,skin: 'msg'
+                    ,time: 1 //2秒后自动关闭
+                })
+            }
+        });
+    }
+
+    function checkAuthToInvit(){
+        local_ajax('/index/User/isAuthApi',{},'get',function (res) {
+            if(res.data.hasBank == 1){
+                if(res.data.isAuth == 1){
+                    window.location.href="{:url('invitation')}";
+                }else if(res.data.isStatus == 0){
+                    layer.open({
+                        content: '實名審核中!'
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                    })
+                }else{
+                    layer.open({
+                        content: '請先實名!'
+                        ,skin: 'msg'
+                        ,time: 1 //2秒后自动关闭
+                    })
+                }
+            }else{
+                layer.open({
+                    content: '請先實名!'
+                    ,skin: 'msg'
+                    ,time: 1 //2秒后自动关闭
+                })
+            }
+        });
+    }
+
+    var ifcanload = 0;
+    function weburlview(weburls,id)
+    {
+        if (1==1) {
+            //ifcanload = 1;
+
+            var page = plus.webview.getWebviewById(id);
+            if (page) {
+                //
+                var nwaiting = plus.nativeUI.showWaiting();//显示原生等待框
+
+
+
+
+                var curdoghomeviewurl = page.getURL();
+                if (curdoghomeviewurl == weburls) {
+                    page.reload(true);
+                    page.show();
+                    nwaiting.close();
+                    //page.show();
+                }
+                else {
+                    //page.destroy();
+                    location.href = weburls;
+                    //page.loadURL(weburls);
+                    //page.show();
+                    nwaiting.close();
+
+                }
+
+
+
+                //page.reload(true);
+                //if (id == "dogmarket")
+                //{
+                //    ajaxshowdoglist();
+                //}
+                //page.show();
+            }
+            else {
+                var nwaiting = plus.nativeUI.showWaiting();//显示原生等待框
+                var webview = plus.webview.create(weburls, id, { statusbar: { background: '#272834' } });//后台创建webview并打开show.html
+                webview.addEventListener("loaded", function () { //注册新webview的载入完成事件
+                    nwaiting.close(); //新webview的载入完毕后关闭等待框
+                    //ifcanload = 0;
+                    webview.show();//把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
+                }, false);
+            }
+        }
+        else
+        {
+
+        }
+
+
+    }
+
+</script>
+
+</body>
+</html>
