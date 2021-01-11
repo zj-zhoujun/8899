@@ -41,7 +41,7 @@ class Login extends Controller
                 $this->error($validate_result);
             } else {
                 $where['username'] = $data['username'];
-                $where['password'] = md5($data['password'] . Config::get('salt'));
+                //$where['password'] = md5($data['password'] . Config::get('salt'));
                 //echo $where['password'];die;
                 $admin_user = Db::name('admin_user')->field('id,username,status')->where($where)->find();
 
