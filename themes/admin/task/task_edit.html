@@ -47,7 +47,11 @@
                     <div class="layui-form-item">
                         <label class="layui-form-label">等级</label>
                         <div class="layui-input-block">
-                            <input type="text" name="level" value="{$taskInfo.level}" required lay-verify="required" placeholder="请输入等级" class="layui-input">
+                            <select name="level">
+                                {foreach name="level_arr" item="level_name"}
+                                <option {if condition="$taskInfo['level'] eq $key"}selected{/if} value="{$key}">{$level_name}</option>
+                                {/foreach}
+                            </select>
                         </div>
                     </div>
 
@@ -127,6 +131,12 @@
                         <label class="layui-form-label">最大库存</label>
                         <div class="layui-input-block" style="width: 32%;">
                             <input type="text" name="max_stock" value="{$taskInfo.max_stock}" required lay-verify="required" placeholder="请输入最大库存" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">注册赠送</label>
+                        <div class="layui-input-block" style="width: 32%;">
+                            <input type="checkbox" name="is_reward" value="1" {if condition="$taskInfo['is_reward'] eq 1"}checked{/if} class="layui-input" />
                         </div>
                     </div>
                     <input type="hidden" name="id" value="{$taskInfo.id}">

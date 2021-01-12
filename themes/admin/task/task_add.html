@@ -7,7 +7,7 @@
     <!--tab标签-->
     <div class="layui-tab layui-tab-brief">
         <ul class="layui-tab-title">
-            <li class=""><a href="{:url('admin/Task/taskConfig')}">抢购列表</a></li>
+            <li class=""><a href="{:url('admin/Task/taskConfig')}">宠物列表</a></li>
             <li class="layui-this">添加</li>
         </ul>
         <div class="layui-tab-content">
@@ -23,7 +23,11 @@
                     <div class="layui-form-item">
                         <label class="layui-form-label">等级</label>
                         <div class="layui-input-block">
-                            <input type="text" name="level" value="" required lay-verify="required" placeholder="请输入等级" class="layui-input">
+                            <select name="level">
+                            {foreach name="level_arr" item="level_name"}
+                                <option value="{$key}">{$level_name}</option>
+                            {/foreach}
+                            </select>
                         </div>
                     </div>
                     <div class="layui-form-item">
@@ -99,6 +103,12 @@
                         <label class="layui-form-label">最大库存</label>
                         <div class="layui-input-block" style="width: 32%;">
                             <input type="text" name="max_stock" value="" required lay-verify="required" placeholder="请输入最大库存" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">注册赠送</label>
+                        <div class="layui-input-block" style="width: 32%;">
+                            <input type="checkbox" name="is_reward" value="1" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-form-item">

@@ -26,7 +26,9 @@ class Task extends AdminBase
       public function taskConfig()
       {
           $taskConfig = Db::name('task_config')->order('start_time','asc')->select();
-          return view()->assign('taskConfig',$taskConfig);
+
+          $this->assign('taskConfig',$taskConfig);
+          return $this->fetch();
       }
 
     /**
@@ -40,6 +42,8 @@ class Task extends AdminBase
               $res = Db::name('task_config')->insert($data);
               $res ? $this->success('添加成功','taskConfig') : $this->error('操作失败');
           }
+          $level_arr = config('extra_types.dog_level');
+          $this->assign('level_arr',$level_arr);
           return view();
       }
 
@@ -58,10 +62,13 @@ class Task extends AdminBase
           $taskInfo = Db::name('task_config')->where('id',$id)->find();
           if ($this->request->isPost()) {
               $data = $this->request->post();
+
+              $data['is_reward'] = $data['is_reward']??0;
               $res = Db::name('task_config')->where('id',$data['id'])->update($data);
-              //echo Db::name('task_config')->getLastSql();die;
               $res ? $this->success('修改成功','taskConfig') : $this->error('操作失败');
           }
+          $level_arr = config('extra_types.dog_level');
+          $this->assign('level_arr',$level_arr);
           return view()->assign('taskInfo',$taskInfo);
       }
 
