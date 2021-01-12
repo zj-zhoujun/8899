@@ -182,6 +182,41 @@ class User extends IndexBase
     }
 
     /**
+     * DOGE卖出（卖到平台了，平台回收）
+     * @return \think\response\View
+     */
+    public function doge_sell()
+    {
+        $config = unserialize(Db::name('system')->where('name','base_config')->value('value'));
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            //dump()
+            if (!$this->user['pay_password']) $this->success('请先设置二级密码','set_paypwd');
+            if (md5($data['data']['password'].config('salt')) != $this->user['pay_password']) $this->error('二级密码不正确');
+            if ($data['data']['number']<0 || !is_numeric($data['data']['number'])) $this->error('数目不合法');
+            if ($this->user['doge'] < $data['data']['number']) $this->error('DOGE不足');
+            $saveDate = [];
+            $saveDate['uid'] = $this->user_id;
+            $saveDate['mobile'] = $this->user['mobile'];
+            $saveDate['currency'] = 'doge';
+            $saveDate['num'] = $data['data']['number'];
+            $saveDate['tx_rate']  = $config['doge_sxf'];
+            $saveDate['sxf'] = $saveDate['num']*$config['doge_sxf']/100;
+            $saveDate['realmoney'] = $saveDate['num']-$saveDate['sxf'];
+            $saveDate['create_time'] = time();
+            $re = Db::name('tixian')->insert($saveDate);
+            if ($re) {
+                moneyLog($this->user_id,$this->user_id,'doge',-$saveDate['num'],7,'DOGE提币');
+                $this->success('操作成功，待系统确认');
+            } else {
+                $this->error('操作失败');
+            }
+
+        }
+        return view()->assign(['doge_tx_sxf'=>$config['doge_sxf']]);
+    }
+
+    /**
      * 微分
      * @return \think\response\View
      */
