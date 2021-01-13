@@ -515,13 +515,13 @@ function daojuLog($uid,$from_id,$daoju,$num,$type,$note)
 
         $log = [
             'user_id' => $uid,
-            'username' => model('User')->where('id', $uid)->value('mobile'),
+            'username' => model('User')->where('id', $uid)->value('username'),
             'from_id' => $from_id,
             'daoju' => $daoju,
             'num' => $num,
             'type' => $type,
             'note' => $note,
-            'create_time' => date('Y-m-d H:i:s')
+            'create_time' => time(),
         ];
         Db::name('daoju_log')->insert($log);
         $info = Db::name('daoju_user')->where('user_id',$uid)->find();
@@ -536,9 +536,7 @@ function daojuLog($uid,$from_id,$daoju,$num,$type,$note)
             $data = [];
             $data['user_id'] = $uid;
             $data[$daoju] = $num;
-            $data['type'] = $type;
-            $data['note'] = $note;
-            $data['u_time'] = time();
+            $data['w_time'] = time();
             Db::name('daoju_user')->insert($data);
         }else{
             Db::name('daoju_user')->where('user_id',$uid)->setInc($daoju,$num);

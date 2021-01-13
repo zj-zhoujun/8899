@@ -79,14 +79,16 @@ class Active extends IndexBase
             $data['w_time'] = time();
             $log_id = Db::name('dazhuanpan_log')->insertGetId($data);
             //赠送限时收益狗狗
+            $bonus_res = ['status'=>true,'msg'=>''];
             if($bonus_type=='dog'){
-                $res = $this->reward_dog();
+                $bonus_res = $this->reward_dog();
             }
             //赠送道具
             if(in_array($bonus_type,['yao'])){
-                $res = daojuLog($this->user_id,$log_id,$bonus_type,$bonus_info['bonus_num'],3,'大转盘抽奖');
+                $bonus_res = daojuLog($this->user_id,$log_id,$bonus_type,$bonus_info['bonus_num'],3,'大转盘抽奖');
             }
-            if($res['status']!=true){
+            if($bonus_res['status']!=true){
+                dump($res);exit;
                 $this->error('发放奖励失败');
             }
             Db::commit();
@@ -128,7 +130,7 @@ class Active extends IndexBase
 
     public function reward_dog(){
         //赠送宠物
-        $pigInfo = Db::name('pig')->where(['is_reward'=>1])->find();
+        $pigInfo = Db::name('task_config')->where(['is_reward'=>1])->find();
         $price = 0;
         $saveDate = [];
         $saveDate['uid'] = $this->user_id;
