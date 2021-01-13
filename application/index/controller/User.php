@@ -195,18 +195,17 @@ class User extends IndexBase
             if (md5($data['data']['password'].config('salt')) != $this->user['pay_password']) $this->error('二级密码不正确');
             if ($data['data']['number']<0 || !is_numeric($data['data']['number'])) $this->error('数目不合法');
             if ($this->user['doge'] < $data['data']['number']) $this->error('DOGE不足');
+            $price = $config['dog_price'];
             $saveDate = [];
             $saveDate['uid'] = $this->user_id;
-            $saveDate['mobile'] = $this->user['mobile'];
-            $saveDate['currency'] = 'doge';
+            $saveDate['username'] = $this->user['username'];
             $saveDate['num'] = $data['data']['number'];
-            $saveDate['tx_rate']  = $config['doge_sxf'];
-            $saveDate['sxf'] = $saveDate['num']*$config['doge_sxf']/100;
-            $saveDate['realmoney'] = $saveDate['num']-$saveDate['sxf'];
-            $saveDate['create_time'] = time();
-            $re = Db::name('tixian')->insert($saveDate);
+            $saveDate['price']  = $price;
+            $saveDate['real_money'] = bcmul($data['data']['number'],$price);
+            $saveDate['w_time'] = time();
+            $re = Db::name('dog_sell')->insert($saveDate);
             if ($re) {
-                moneyLog($this->user_id,$this->user_id,'doge',-$saveDate['num'],7,'DOGE提币');
+                moneyLog($this->user_id,$this->user_id,'doge',-$saveDate['num'],7,'DOGE卖出');
                 $this->success('操作成功，待系统确认');
             } else {
                 $this->error('操作失败');

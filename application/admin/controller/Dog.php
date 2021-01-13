@@ -21,57 +21,33 @@ class Dog extends AdminBase
     {
         parent::_initialize();
     }
-    /**
-     * 团队级别
-     * @return \think\response\View
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\ModelNotFoundException
-     * @throws \think\exception\DbException
-     */
-    public function category()
+
+    public function daoju()
     {
-        $list = Db::name('dog_level')->select();
+        $list = Db::name('dog_daoju')->select();
         $this->assign('list',$list);
         return view();
     }
 
-    /**
-     * 添加团队级别
-     * @return \think\response\View
-     */
-    public function categoryadd()
-    {
-        if ($this->request->isPost()) {
-            $data = $this->request->post();
-            $res = model('MarketLevel')->save($data);
-            $res ? $this->success('操作成功') : $this->error('操作失败');
-        }
-        return view();
-    }
-
-    /**
-     * 市场角色修改
-     * @return \think\response\View
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\ModelNotFoundException
-     * @throws \think\exception\DbException
-     */
-    public function categoryedit()
+    public function daojuedit()
     {
         $id = $this->request->param('id');
         //dump($id);
         if ($this->request->isPost()) {
-            $data = $this->request->post();
+            $args = $this->request->post();
             //dump($data);
-            $res = model('MarketLevel')->save($data,['id'=>$data['id']]);
+            $data = [];
+            $data['price'] = $args['price'];
+            $res = Db::name('dog_daoju')->where(['id'=>$id])->update($data);
             //dump($res);
             $res ? $this->success('操作成功') : $this->error('修改失败');
         }
-        $this->assign('confInfo',model('MarketLevel')->find($id));
+        $info = Db::name('dog_daoju')->where(['id'=>$id])->find();
+        $this->assign('confInfo',$info);
         return view();
     }
 
-    public function categoryDel()
+    public function daojuDel()
     {
         $id = $this->request->param('id');
         $res = Db::name('market_level')->where('id',$id)->delete();

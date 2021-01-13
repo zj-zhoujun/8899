@@ -41,6 +41,30 @@
                         </div>
 
                     </div>
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+                        <legend>狗狗币配置</legend>
+                    </fieldset>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">1狗狗币等于</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="dog_price" placeholder="" autocomplete="off" class="layui-input"  value="{$base_config['dog_price']|default=''}">
+                            </div>
+                        </div>
+
+                    </div>
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+                        <legend>签到配置</legend>
+                    </fieldset>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">签到赠送微分</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="sign_reward" placeholder="" autocomplete="off" class="layui-input"  value="{$base_config['sign_reward']|default=''}">
+                            </div>
+                        </div>
+
+                    </div>
 
                     <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
                         <legend>手续费配置</legend>

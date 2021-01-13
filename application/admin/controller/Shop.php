@@ -307,4 +307,44 @@ class Shop extends AdminBase
         }
         return view()->assign('info',$info);
     }
+
+
+    /**
+     * 狗狗币卖出列表
+     * @return mixed
+     */
+    public function dogsell()
+    {
+        $status=$this->request->param('status');
+        $username=$this->request->param('username');
+        if($status){
+            $map['status']=$status;
+        }else{
+            $map['status']=['egt',0];
+        }
+        if($username){
+            $map['username']=$username;
+        }
+        $list=Db::name('dog_sell')->where($map)->paginate(12,false,['query'=>$this->request->param()]);
+        $this->assign('list',$list);
+        $this->assign('page',$list->render());
+        return $this->fetch();
+    }
+
+    /**
+     * 卖出狗狗币处理
+     * @return mixed
+     */
+    public function auditDogSell($id)
+    {
+        $data['audit_time']=time();
+        $data['status']=1;
+        //$data['msg']='处理成功';
+        $re=Db::name('dog_sell')->where('id',$id)->update($data);
+        if($re){
+            $this->success('处理成功');
+        }else{
+            $this->error('处理失败');
+        }
+    }
 }
