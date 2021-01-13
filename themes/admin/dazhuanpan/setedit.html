@@ -4,7 +4,7 @@
     <!--tab标签-->
     <div class="layui-tab layui-tab-brief">
         <ul class="layui-tab-title">
-            <li class=""><a href="{:url('admin/System/marketConfig')}">团队奖励配置</a></li>
+            <li class=""><a href="{:url('admin/Dazhuanpan/index')}">大转盘奖励配置</a></li>
             <li class="layui-this">编辑</li>
         </ul>
         <div class="layui-tab-content">
@@ -22,7 +22,7 @@
                         <div class="layui-input-block">
                             <select name="bonus_type">
                                 {foreach name="bonus_types" item="bonus_name" key="bonus_type"}
-                                <option value="{$bonus_type}">{$bonus_name}</option>
+                                <option {if condition="$confInfo['bonus_type'] eq $bonus_type"}selected{/if} value="{$bonus_type}">{$bonus_name}</option>
                                 {/foreach}
                             </select>
                         </div>
@@ -31,6 +31,12 @@
                         <label class="layui-form-label">奖励数量</label>
                         <div class="layui-input-block">
                             <input type="text" name="bonus_num" value="{$confInfo.bonus_num}" required lay-verify="required" placeholder="请输入奖励数量" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">中奖概率</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="pv" value="{$confInfo.pv}" required lay-verify="required" placeholder="请输入中奖概率" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-form-item">

@@ -18,5 +18,6 @@ return [
         'doge'          => '狗狗币',
         'pay_points'    => '微分',
         'yao'           => '药品',
+        'empty'         => '未中奖',
     ],
 ];

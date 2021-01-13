@@ -54,9 +54,10 @@ class Dazhuanpan extends AdminBase
             $data = [];
             $data['bonus_type'] = $params['bonus_type'];
             $data['bonus_num'] = $params['bonus_num'];
+            $data['pv'] = $params['pv'];
             $res = Db::name('dazhuanpan')->where(['id'=>$id])->update($data);
             //dump($res);
-            $res ? $this->success('操作成功') : $this->error('修改失败');
+            $res ? $this->success('操作成功',url('index')) : $this->error('修改失败');
         }
         $info = Db::name('dazhuanpan')->where(['id'=>$id])->find();
         $this->assign('confInfo',$info);

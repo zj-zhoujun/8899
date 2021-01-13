@@ -499,3 +499,49 @@ function smsBao($phone,$content){
 	$result =file_get_contents($sendurl) ;
 	return array('status'=>$result,'content'=>$statusStr[$result]);
 }
+
+/**
+ * 道具变动记录
+ * @param $uid
+ * @param $from_id
+ * @param $currency
+ * @param $amount
+ * @param $type
+ * @param $note
+ * @return bool
+ */
+function daojuLog($uid,$from_id,$daoju,$num,$type,$note)
+{
+
+        $log = [
+            'user_id' => $uid,
+            'username' => model('User')->where('id', $uid)->value('mobile'),
+            'from_id' => $from_id,
+            'daoju' => $daoju,
+            'num' => $num,
+            'type' => $type,
+            'note' => $note,
+            'create_time' => date('Y-m-d H:i:s')
+        ];
+        Db::name('daoju_log')->insert($log);
+        $info = Db::name('daoju_user')->where('user_id',$uid)->find();
+        if($num<0){
+            $user_num = $info[$daoju]??0;
+            $remain = bcadd($user_num,$num);
+            if($remain<0){
+                return ['status'=>false,'msg'=>'数量不足'];
+            }
+        }
+        if(!$info){
+            $data = [];
+            $data['user_id'] = $uid;
+            $data[$daoju] = $num;
+            $data['type'] = $type;
+            $data['note'] = $note;
+            $data['u_time'] = time();
+            Db::name('daoju_user')->insert($data);
+        }else{
+            Db::name('daoju_user')->where('user_id',$uid)->setInc($daoju,$num);
+        }
+       return ['status'=>true,'msg'=>'操作成功'];
+}

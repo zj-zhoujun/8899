@@ -20,6 +20,7 @@
                         <th>中奖级别</th>
                         <th>奖金数量</th>
                         <th>奖金类型</th>
+                        <th>中奖概率（%）</th>
                         <th>操作</th>
                     </tr>
                     </thead>
@@ -28,11 +29,9 @@
                     <tr>
                         <td>{$vo.id}</td>
                         <td>{$vo.name}</td>
-
                         <td>{$vo.bonus_num}</td>
                         <td>{$bonus_types[$vo['bonus_type']]}</td>
-
-
+                        <td>{$vo.pv}</td>
                         <td>
                             <a href="{:url('admin/Dazhuanpan/setedit',['id'=>$vo.id])}" class="layui-btn-mini layui-btn">编辑</a>
                             <!--<a href="{:url('admin/Dazhuanpan/marketDel',['id'=>$vo.id])}" class="layui-btn-mini layui-btn ajax-delete">删除</a>-->
