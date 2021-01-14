@@ -192,6 +192,7 @@ class Plan extends Controller
         $nowTime = time();
         $map = [];
         $map['status'] = 0;
+        $map['health'] = 0;
         $map['end_time'] = ['<', $nowTime];
         $pigsList = Db::name('user_pigs')->where($map)->select();
         $config = unserialize(Db::name('system')->where('name', 'base_config')->value('value'));
@@ -372,6 +373,26 @@ class Plan extends Controller
     {
         $pigInfo = Db::name('task_config')->where('id', $id)->field('id,contract_revenue,doge')->find();
         return $pigInfo;
+    }
+
+    /**
+     * 每两天让狗狗病一次
+     */
+    public function health(){
+        $list = Db::name('user_pigs')->where(['status'=>0,'health'=>0])->select();
+        //dump($list);exit;
+        if(!$list){
+            die('暂无数据');
+        }
+        //每两天生病一次
+        foreach($list as $v){
+            $health_time = $v['health_time']?:$v['create_time'];
+            $next_time = $health_time+86400*2;
+            if($next_time){
+                Db::name('user_pigs')->where('id',$v['id'])->update(['health'=>1,'health_time'=>time()]);
+            }
+        }
+        dump('完成');exit;
     }
 }
 

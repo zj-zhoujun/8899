@@ -17,7 +17,7 @@ class Index extends IndexBase
     //首页
     public function index()
     {
-        $piglist = Db::name('task_config')->order("start_time asc")->select();
+        $piglist = Db::name('task_config')->where('is_reward',0)->order("start_time asc")->select();
         $nowtime = date('H:i');
         $nowday = date('Y-m-d ');
         $time = time();
