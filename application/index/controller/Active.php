@@ -21,7 +21,10 @@ class Active extends IndexBase
      */
     public function index()
     {
-        return $this->fetch();
+        //签到处理
+        $config = unserialize(Db::name('system')->where('name','base_config')->value('value'));
+        $this->assign('bonus',$config['sign_reward']);
+        return $this->fetch('sign');
     }
     public function sign()
     {
@@ -40,6 +43,7 @@ class Active extends IndexBase
         $data['user_id'] = $user['id'];
         $data['username'] = $user['username'];
         $data['day'] = date('Ymd');
+        $data['m'] = date('m');
         $data['bonus'] = $config['sign_reward'];
         $data['w_time'] = time();
         $sign_id = Db::name('sign_log')->insertGetId($data);
@@ -47,11 +51,38 @@ class Active extends IndexBase
         $this->success('签到成功');
     }
 
+    //获取签到列表
+    public function getSignLists(){
+        $m = date('m');
+        $list = Db::name('sign_log')->where(['user_id'=>$this->user_id,'m'=>$m])->column('w_time');
+        return $list;
+    }
+    /**
+     * 大转盘
+     */
+    public function lottery(){
 
+        return $this->fetch();
+    }
+
+    public function get_set(){
+        $prize_arr = Db::name('dazhuanpan')->order('id desc')->column('name');
+        $s_time = strtotime(date('Y-m-d'));
+        $e_time = $s_time+86400;
+        $count = Db::name('dazhuanpan_log')->where(['user_id'=>$this->user_id,'w_time'=>['between',[$s_time,$e_time]]])->count();
+        $num = 1-$count;
+        return ['list'=>$prize_arr,'num'=>$num];
+    }
     public function get_gift(){
+        $s_time = strtotime(date('Y-m-d'));
+        $e_time = $s_time+86400;
+        $count = Db::name('dazhuanpan_log')->where(['user_id'=>$this->user_id,'w_time'=>['between',[$s_time,$e_time]]])->count();
+        if($count>0){
+            $this->error('今日已抽过了，请明天再来');
+        }
         //拼装奖项数组
         // 奖项id，奖品，概率
-        $prize_arr = Db::name('dazhuanpan')->field('id,level,name,bonus_type,bonus_num,pv')->select();
+        $prize_arr = Db::name('dazhuanpan')->field('id,level,name,bonus_type,bonus_num,pv')->order('id desc')->select();
         foreach ($prize_arr as $key => $val) {
             $arr[$val['id']] = $val['pv'];//概率数组
         }
@@ -88,7 +119,6 @@ class Active extends IndexBase
                 $bonus_res = daojuLog($this->user_id,$log_id,$bonus_type,$bonus_info['bonus_num'],3,'大转盘抽奖');
             }
             if($bonus_res['status']!=true){
-                dump($res);exit;
                 $this->error('发放奖励失败');
             }
             Db::commit();
@@ -104,7 +134,8 @@ class Active extends IndexBase
             $result['msg'] = $bonus_info['name'];
         }
         //return $result;
-        var_dump($result);
+        //var_dump($result);
+        return $rid;
     }
 
     //计算中奖概率

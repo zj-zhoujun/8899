@@ -49,6 +49,18 @@ class Dog extends IndexBase
         $this->success('购买成功',url('index'));
     }
 
+    public function use_daoju(){
+        $type = input('type');
+        $user = $this->user;
+        $info = Db::name('dog_daoju_user')->where('user_id',$user['id'])->find();
+        if(!$info[$type]<=0){
+            $this->error('道具不足，请先购买！');
+        }
+
+        Db::startTrans();
+        $res = daojuLog($user['id'],$info['id'],$type,-1,3,'使用道具');
+        Db::commit();
+    }
 
 
 
