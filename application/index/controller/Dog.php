@@ -27,6 +27,7 @@ class Dog extends IndexBase
     //道具列表
     public function daoju_list(){
         $list = Db::name('dog_daoju')->select();
+        //dump($list);exit;
         $this->assign('list',$list);
         return $this->fetch();
     }
