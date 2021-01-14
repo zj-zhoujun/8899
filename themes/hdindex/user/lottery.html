@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>大转盘</title>
+    <link href="/public/static/index/assets/css/lottery.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+    <div class="back-wrap">
+      <a href="javascript:void(history.back())">
+        <img src="/public/static/index/assets/images/back-img.png" alt="">
+      </a>
+    </div>
+    <!-- 弹出层 -->
+    <div class="turntable"><img class="turntablebg" src="/public/static/index/assets/images/task_draw_reward_default_bg.png" alt="turntableBg">
+        <div class="rotate">
+            <div id="my-lucky"></div>
+        </div>
+        <div class="turntable_font">
+            <div class="turn_font_right"><img src="/public/static/index/assets/images/task_draw_reward_clock_icon.png"
+                    alt="task_draw_reward_clock_icon"><span>免费次数:</span>
+                <font id="num">1</font><span>次</span>
+            </div>
+        </div>
+    </div>
+    <div class="taskRules">
+        <div class="rules">
+            <div class="task_title"><img src="/public/static/index/assets/images/task_draw_reward_rule_title_img.png"
+                    alt="task_draw_reward_rule_title_img"></div>
+            <div class="rules_con">
+                <ul>
+                    <li>1、每人每天开局有<span>1</span>次免费抽奖机会；</li>
+                    <li>2、抽奖结果以当次抽奖结束后显示窗口的内容为准；</li><br>
+                    <li class="rules_li">温馨提醒：如果页面未及时显示您的免费机会，请尝试退出活动页面再重新进来哦。</li>
+                </ul>
+                <div id="rules_con_footer" class="rules_con_footer">本活动解释权归XXX所有</div>
+            </div>
+        </div>
+    </div>
+    <script src="/public/static/index/assets/js/jquery-1.10.2.js"></script>
+    <script src="/public/static/index/assets/js/lottery.js"></script>
+    <script>
+      var dataList = ['限时收益的狗狗', '谢谢惠顾', '微分', '药品', '谢谢惠顾', '狗币']  // 定义奖品
+      var prizes = []  // 定义设置奖品
+      var numObj = document.getElementById('num')  // 定义数量对象
+      var winNum = 1  // 定义中奖类型
+      // 获取转盘奖品列表接口
+      function getList () {
+        $.ajax({
+          type: 'POST',
+          url: '',
+          data: {},
+          dataType: 'json',
+          success: function (res) {
+            dataList = res.data.list
+            numObj.innerHTML = res.data.num
+          }
+        })
+      }
+      // 获取中奖接口
+      function getWinNum () {
+        $.ajax({
+          type: 'POST',
+          url: '',
+          data: {},
+          dataType: 'json',
+          success: function (res) {
+            winNum = res.data
+          }
+        })
+      }
+      // 现在没有接口，暂时屏蔽
+      // getList ()
+
+      // 设置奖品
+      dataList.forEach((item, index) => {
+        prizes.push({
+          title: item,
+          index: index,
+          background: index % 2 ? '#f9e3bb' : '#f8d384',
+          fonts: [{ text: item, top: '10%' }]
+        })
+      })
+      // 创建大转盘抽奖
+      let luckyWheel = new LuckyCanvas.LuckyWheel({
+        el: '#my-lucky',
+        width: '300px',
+        height: '300px',
+      }, {
+        prizes: prizes,
+        defaultStyle: {
+          fontColor: '#d64737',
+          fontSize: '14px'
+        },
+        blocks: [
+          { padding: '13px', background: '#d64737' }
+        ],
+        buttons: [
+          { radius: '50px', background: '#d64737' },
+          { radius: '45px', background: '#fff' },
+          { radius: '41px', background: '#f6c66f', pointer: true },
+          {
+            radius: '35px', background: '#ffdea0',
+            imgs: [{ src: '/public/static/index/assets/images/button.png', width: '65%', top: '-50%' }]
+          }
+        ],
+        start () {
+            if (numObj.innerText == 0) {
+              alert('您已没有抽奖次数')
+              return
+            } else {
+              // 没有接口，先屏蔽
+              // getWinNum ()
+            }
+          luckyWheel.play()
+          setTimeout(() => {
+            luckyWheel.stop(winNum)
+          }, 3000)
+        },
+        end (prize) {
+            numObj.innerHTML = numObj.innerText - 1
+            if (prize.index === 1 || prize.index === 4) {
+                alert(prize.title)
+            } else {
+                alert(`恭喜你获得${prize.title}`)
+            }
+        },
+      })
+    </script>
+</body>
+
+</html>
