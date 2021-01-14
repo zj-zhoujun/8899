@@ -66,7 +66,7 @@ class Active extends IndexBase
     }
 
     public function get_set(){
-        $prize_arr = Db::name('dazhuanpan')->order('id desc')->column('name');
+        $prize_arr = Db::name('dazhuanpan')->order('id desc')->column('title');
         $s_time = strtotime(date('Y-m-d'));
         $e_time = $s_time+86400;
         $count = Db::name('dazhuanpan_log')->where(['user_id'=>$this->user_id,'w_time'=>['between',[$s_time,$e_time]]])->count();
