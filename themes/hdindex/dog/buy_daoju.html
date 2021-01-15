@@ -48,20 +48,11 @@
         <!-- 页面内容 -->
         <div class="fromBox">
           <div class="top"><img src="/public/static/index/assets/images/tipsIcon.png" alt=""><span class="fs26 fw_b color_r">当前价格：{$info.price}</span></div>
-            <div class="weui-cells__title fs28 color_3 fw_b">转赠数量</div>
+            <div class="weui-cells__title fs28 color_3 fw_b">购买数量</div>
             <div class="weui-cells weui-cells_form">
               <div class="weui-cell">
                 <div class="weui-cell__bd">
-                  <input class="weui-input fs28 fw_b number" type="text" placeholder="最大可转赠{$user.pay_points-$baseConfig['wf_lownb']}"/>
-                 <!--   <input class="weui-input fs28 fw_b number" type="text" placeholder="最大可转赠{$user.pay_points-$baseConfig['wf_lownb']},请输入{$baseConfig['wf_nb']}的倍数"/> -->
-                </div>
-              </div>
-            </div>
-            <div class="weui-cells__title  fs28 color_3 fw_b">对方手机<span id="nickname" style="color: red;"></span></div>
-            <div class="weui-cells weui-cells_form">
-              <div class="weui-cell">
-                <div class="weui-cell__bd">
-                  <input class="weui-input fs28 fw_b mobile" id="mobile" type="text" placeholder="请输入对方手机号码"/>
+                  <input class="weui-input fs28 fw_b number" type="text" placeholder="请输入购买数量"/>
                 </div>
               </div>
             </div>
@@ -75,7 +66,7 @@
             </div>
         </div>
 
-        <div class="butBox"><div class="but">确认转赠</div></div>
+        <div class="butBox"><div class="but">确认购买</div></div>
 
       </div>
     </div>
@@ -90,29 +81,19 @@
     });
     $('.but').click(function(){
         var number   = $('.number').val();
-        var mobile   = $('.mobile').val();
         var password   = $('#password').val();
         if (!number) {
           layer.open({
-                content: '请输入转赠数量'
-                ,skin: 'msg'
-                ,time: 1 //2秒后自动关闭
-              });
-          return false;
-        }
-        if (!mobile) {
-          layer.open({
-                content: '请输入对方手机号码'
+                content: '请输入购买数量'
                 ,skin: 'msg'
                 ,time: 1 //2秒后自动关闭
               });
           return false;
         }
 
-        var url       = '/index/User/blessings_transfer';
+        var url       = '/index/Dog/buy_daoju';
         var data      = {};
         data.number   = $('.number').val();
-        data.mobile   = $('.mobile').val();
         data.password = $('#password').val();
         var mehod     = 'post';
         __ajax(url,data,mehod,function(data){
@@ -123,53 +104,11 @@
             });
             if (data.code ==1) {
                 window.setTimeout(function(){
-                    window.location.href = '/index/User/blessings_log'
+                    window.location.href = '/index/Dog/daoju_list'
                 },1000);
             }
-
         });
-        
-        //密码框
-        // layer.open({
-        //   content: '<input  class="password"  type="password" style="width:100%;height:50px;border:1px red;" placeholder="请输入交易密码"/>'
-        //   ,btn: ['确认', '取消']
-        //   ,yes: function(index){
-        //     var password = $('.password').val();
-        //     if (!password) {
-        //       layer.open({
-        //             content: '请输入交易密码'
-        //             ,skin: 'msg'
-        //             ,time: 1 //2秒后自动关闭
-        //           });
-        //       return false;
-        //     }
-        //
-        //     layer.close(index);
-        //   }
-        // });
     })
-
-
-       //输入手机后失去焦点
-    // $(document).on("blur","#mobile",function(){
-    //     var mobile = $('#mobile').val();
-    //     if(mobile==''){
-    //          return
-    //     }
-    //     var url       = '/api/business/checkuserbymobile';
-    //     var data      = {};
-    //     data.mobile   = mobile;
-    //     $.ajax({
-    //       url: url,
-    //       type: 'post',
-    //       dataType: 'json',
-    //       data:data,
-    //       success: function (data, status) {
-    //         $('#nickname').html(data.message)
-    //       }
-    //     })
-    //
-    // })
 </script>
      
   </body>

@@ -232,6 +232,14 @@
                   <!-- <div>获得收益：<span class="color_r fw_b">{php}echo round(($vl['price']*($vl['pig_info']['contract_revenue']/100))/$vl['pig_info']['cycle'],2);{/php}</span></div> -->
 
                   <div>抢矿时间：{$vl.create_time|date="Y.m.d H:i:s",###}</div>
+                  <div>
+                    宠物状态：
+                    {if condition="$vl['health'] eq 0"}
+                        健康
+                    {else/}
+                      生病了 &nbsp;&nbsp;&nbsp;&nbsp;<input type="button" onclick="health({$vl.id})" value="用药" />
+                    {/if}
+                  </div>
 
                   <!--<div class="butt color_r fw_b fs30">锁仓</div>-->
 
@@ -333,6 +341,30 @@
 
 <script>
 
+    function health(id){
+        $.ajax({
+
+            type : "POST",
+
+            url:'url("Dog/use_daoju")',
+
+            dataType:"json",
+
+            data : {id:id},// 你的formid
+
+            success: function(data){
+
+                alert(data.message);
+
+                if(data.status==1){
+
+                    window.location.reload();
+
+                }
+            }
+
+        });
+    }
     $(function() {
 
         FastClick.attach(document.body);
