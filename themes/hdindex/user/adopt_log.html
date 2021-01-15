@@ -346,20 +346,16 @@
 
             type : "POST",
 
-            url:'url("Dog/use_daoju")',
+            url:'{:url("Dog/use_daoju")}',
 
             dataType:"json",
 
             data : {id:id},// 你的formid
 
             success: function(data){
-
-                alert(data.message);
-
-                if(data.status==1){
-
+                alert(data.msg);
+                if(data.code==1){
                     window.location.reload();
-
                 }
             }
 

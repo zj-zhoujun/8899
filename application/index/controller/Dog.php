@@ -26,7 +26,7 @@ class Dog extends IndexBase
 
     //道具列表
     public function daoju_list(){
-        $list = Db::name('daoju_log')->select();
+        $list = Db::name('daoju_log')->order('id desc')->select();
         //dump($list);exit;
         $this->assign('list',$list);
         $num_total = Db::name('daoju_user')->where('user_id',$this->user_id)->value('chong');
@@ -75,6 +75,7 @@ class Dog extends IndexBase
     public function use_daoju(){
         $type = 'chong';
         $pid = input('id');
+        //dump($pid);exit;
         $user = $this->user;
         $info = Db::name('daoju_user')->where('user_id',$user['id'])->find();
         if($info[$type]<=0){
