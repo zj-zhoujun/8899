@@ -26,9 +26,12 @@ class Dog extends IndexBase
 
     //道具列表
     public function daoju_list(){
-        $list = Db::name('dog_daoju')->select();
+        $list = Db::name('daoju_log')->select();
         //dump($list);exit;
         $this->assign('list',$list);
+        $num_total = Db::name('daoju_user')->where('user_id',$this->user_id)->value('chong');
+        $num_total = $num_total?:0;
+        $this->assign('num_total',$num_total);
         return $this->fetch();
     }
     /**
@@ -37,28 +40,36 @@ class Dog extends IndexBase
     public function buy_daoju()
     {
         $user = $this->user;
-        $type = input('type');
-        $num = input('num');
-        $pwd = input('paypwd');
-        if(!$type){
-            $this->error('请选择道具');
-        }
-        $num = $num?:1;
+        $type = 'chong';
         $info = Db::name('dog_daoju')->where('type',$type)->find();
+        if($_POST){
 
-        //密码验证
-        if (!$user['pay_password']) $this->success('请先设置二级密码',url('user/set_paypwd'));
-        if (md5($pwd.config('salt')) != $user['pay_password']) $this->error('二级密码不正确');
-        //电力
-        $price_total = bcmul($info['price'],$num);
-        if ($user['pay_points']<$info['price']){
-            $this->error('微分不足,请充值');
+            $num = input('num');
+            $pwd = input('paypwd');
+            if(!$type){
+                $this->error('请选择道具');
+            }
+            $num = $num?:1;
+
+
+            //密码验证
+            if (!$user['pay_password']) $this->success('请先设置二级密码',url('user/set_paypwd'));
+            if (md5($pwd.config('salt')) != $user['pay_password']) $this->error('二级密码不正确');
+            //电力
+            $price_total = bcmul($info['price'],$num);
+            if ($user['pay_points']<$info['price']){
+                $this->error('微分不足,请充值');
+            }
+            moneyLog($user['id'],$info['id'],'pay_points',-$price_total,3,'购买道具');
+            Db::startTrans();
+            $res = daojuLog($user['id'],$info['id'],$type,$num,3,'购买');
+            Db::commit();
+            $this->success('购买成功',url('index'));
+        }else{
+            $this->assign('info',$info);
+            return $this->fetch();
         }
-        moneyLog($user['id'],$info['id'],'pay_points',-$price_total,3,'购买道具');
-        Db::startTrans();
-        $res = daojuLog($user['id'],$info['id'],$type,$num,3,'购买');
-        Db::commit();
-        $this->success('购买成功',url('index'));
+
     }
 
     public function use_daoju(){
