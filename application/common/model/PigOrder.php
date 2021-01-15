@@ -31,6 +31,8 @@ class PigOrder extends Model
         if($re){
 
             $orderInfo = $this->find($id);
+            //echo Db::getLastSql();exit;
+            //dump($orderInfo);exit;
             //把猪添加到买方
             $userPig = [];
             //$order
@@ -56,6 +58,7 @@ class PigOrder extends Model
             $userPig['create_time'] = time();
             $userPig['end_time'] = time()+$pigInfo['cycle']*24*3600-$sell_end_time;
             Db::name('user_pigs')->where('order_id',$id)->update($userPig);
+            echo Db::getLastSql();exit;
             //销毁原来的猪
 //            $map = [];
 //            $map['order_id'] = $id;

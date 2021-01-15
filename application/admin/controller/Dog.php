@@ -24,7 +24,7 @@ class Dog extends AdminBase
 
     public function daoju()
     {
-        $list = Db::name('dog_daoju')->select();
+        $list = Db::name('dog_daoju')->where('is_del',0)->select();
         $this->assign('list',$list);
         return view();
     }

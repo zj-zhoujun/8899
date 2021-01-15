@@ -101,6 +101,7 @@ class Dog extends IndexBase
         }
         //更改宠物狗状态
         Db::name('pig_order')->where(['uid'=>$user['id'],'id'=>$pid])->setField('health',0);
+        Db::name('user_pigs')->where('order_id',$pid)->setField('health',0);
         Db::commit();
         $this->success('操作成功！');
     }

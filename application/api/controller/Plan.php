@@ -390,6 +390,7 @@ class Plan extends Controller
             $next_time = $health_time+86400*2;
             if($next_time){
                 Db::name('user_pigs')->where('id',$v['id'])->update(['health'=>1,'health_time'=>time()]);
+                Db::name('pig_order')->where('id',$v['order_id'])->update(['health'=>1]);
             }
         }
         dump('完成');exit;

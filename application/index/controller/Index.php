@@ -230,7 +230,11 @@ class Index extends IndexBase
         if (isset($baseConfig['qiangdan_limit'])&&$userPigsCount>=$baseConfig['qiangdan_limit']){
             $this->error('您库存的矿场超过最大限额，请等待成熟转让后再来抢哦');
         }
-
+        //不同品种的宠物同时只能存在两只
+        $pig_group = Db::name('pig_order')->where(['uid'=>$this->user_id])->group('pig_id')->count();
+        if($pig_group>=2){
+            $this->error('不同品种宠物只能同时拥有两只');
+        }
 
         $today = strtotime(date('Y-m-d'));
         $map = [];
