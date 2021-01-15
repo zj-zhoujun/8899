@@ -9661,10 +9661,10 @@ p.nike-price .throughli {
 }
 .page_tips_box.green{border-color: #009323; background: #E3FFEA; color: #009323;}
 
-.grid_menu{ margin: 0.8rem; border-radius: .35rem; overflow: hidden;}
+.grid_menu{ margin: 0.8rem 0.8rem 2.4rem; border-radius: .35rem; overflow: hidden;}
 .grid_menu .item{
 	float: left;width: 33.3%;height: 4rem; border-bottom: 1px solid #272834;border-right: 1px solid #272834; 
-	text-align: center; background: #4a4b50; position: relative; color: #E0E0E0;
+	text-align: center; background: #4a4b50; color: #E0E0E0;
 }
 .grid_menu .item i{font-size: 1.5rem;}
 .grid_menu .item h3{font-weight: normal; margin-top: 10px; font-size: 0.6rem;}
@@ -9676,7 +9676,7 @@ p.nike-price .throughli {
 .grid_menu .item i.c4{color: #43AC97;}
 .grid_menu .item .new_msg{background: #FF0000; width:10px; height: 10px; border-radius: 100%; z-index: 999; position: absolute; top: 10px; right: 10px;}
 
-.grid_menu2{ margin: 0.8rem; border-radius: .35rem; overflow: hidden; background: #3B3E46;}
+.grid_menu2{ margin: 0.4rem 0.8rem; border-radius: .35rem; overflow: hidden; background: #3B3E46;}
 .grid_menu2 .item{float: left;width: 33.3%;height: 3rem; text-align: center; color: #eee}
 .grid_menu2 .item i{font-size: 1.3rem;}
 .grid_menu2 .item h3{font-weight: normal; margin-top: 0.2rem; font-size: 0.6rem;}
@@ -9695,8 +9695,8 @@ p.nike-price .throughli {
 .my_center_top .user_info .t{padding-left: .2rem; padding-top: .6rem; line-height: 0.8rem; font-size: 0.6rem; color: #FFF;}
 .my_center_top .user_info .t h3{font-size: 0.75rem; margin-bottom: .3rem;}
 .my_center_top .account_info{
-	background: #1D1F2B; border-radius: .35rem; display: block;  height: 7.6rem;
-	margin: 0.2rem 0.8rem; margin-top: -2.5rem;padding: 1rem 0.7rem 0.7rem 0.7rem;
+	background: #1D1F2B; border-radius: .35rem; display: block;  height: 5.2rem;
+	margin: 0.2rem 0.8rem; margin-top: -2.5rem;padding: 0.6rem 0.7rem 0.7rem 0.7rem;
 }
 .my_center_top .account_info ul{}
 .my_center_top .account_info ul li{width: 33.3%; float: left; text-align: center; line-height: 0.8rem; margin-bottom: .6rem;}
