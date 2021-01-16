@@ -43,9 +43,9 @@ class Dog extends IndexBase
         $type = 'chong';
         $info = Db::name('dog_daoju')->where('type',$type)->find();
         if($_POST){
-
-            $num = input('number');
-            $pwd = input('password');
+            $data = input('data/a');
+            $num = $data['number'];
+            $pwd = $data['password'];
             if(!$type){
                 $this->error('请选择道具');
             }
@@ -54,7 +54,7 @@ class Dog extends IndexBase
 
             //密码验证
             if (!$user['pay_password']) $this->success('请先设置二级密码',url('user/set_paypwd'));
-            //if (md5($pwd.config('salt')) != $user['pay_password']) $this->error('二级密码不正确');
+            if (md5($pwd.config('salt')) != $user['pay_password']) $this->error('二级密码不正确');
             //电力
             $price_total = bcmul($info['price'],$num);
             if ($user['pay_points']<$info['price']){
@@ -79,7 +79,7 @@ class Dog extends IndexBase
         $user = $this->user;
         $info = Db::name('daoju_user')->where('user_id',$user['id'])->find();
         if($info[$type]<=0){
-            $this->error('道具不足，请先购买！');
+            $this->error('道具不足，请先购买！',url('buy_daoju'));
         }
         $pig_info = Db::name('pig_order')->where(['uid'=>$user['id'],'id'=>$pid])->find();
         if(!$pig_info){

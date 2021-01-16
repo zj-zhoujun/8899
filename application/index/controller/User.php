@@ -529,7 +529,6 @@ class User extends IndexBase
         //echo $id;
         if ($this->request->isPost()) {
             $data = $this->request->post();
-            dump($data);
             $paypwd = $data['data']['paypwd'];
             if (md5($paypwd.config('salt')) != $this->user['pay_password']) {
                 $this->error('二级密码不正确');
