@@ -304,6 +304,7 @@ class Login extends Controller
                 $sellOrder['create_time'] = time();
                 $sellOrder['sell_id'] = 0;
                 $order_id = Db::name('PigOrder')->insertGetId($sellOrder);
+                Db::name('user_pigs')->where('id',$sell_id)->update(['order_id'=>$order_id]);
                 Db::commit();
                 $this->success('注册成功！',url('login/downapp'));
 

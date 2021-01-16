@@ -490,6 +490,8 @@ class Task extends AdminBase
         $sellOrder['create_time'] = time();
         $sellOrder['sell_id'] = 0;
         $order_id = Db::name('PigOrder')->insertGetId($sellOrder);
+          //更新用户猪对应的订单号
+          Db::name('user_pigs')->where('id',$sell_id)->update(['order_id'=>$order_id]);
       }
       $this->success('生成成功');
     }
