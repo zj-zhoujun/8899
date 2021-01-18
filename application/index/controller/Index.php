@@ -259,6 +259,9 @@ class Index extends IndexBase
             if ($this->user['pay_points']<$pigInfo['qiang_points']){
                 $this->error('电力不足,请充值');
             }
+            if ($this->user['doge']<$pigInfo['qiang_doge']){
+                $this->error('狗币不足,请充值');
+            }
 
             $insertData = [];
 
@@ -270,10 +273,17 @@ class Index extends IndexBase
             $insertData['buy_type'] = 1;
 
             $insertData['pay_points'] = $pigInfo['qiang_points'];
+            $insertData['pay_doge'] = $pigInfo['qiang_doge'];
             $re = Db::name('yuyue')->insert($insertData);
             if ($re) {
                 //减少电力
-                moneyLog($this->user_id,0,'pay_points',-$pigInfo['qiang_points'],3,'抢购矿场');
+                if($pigInfo['qiang_points']>0){
+                    moneyLog($this->user_id,0,'pay_points',-$pigInfo['qiang_points'],3,'抢购矿场');
+                }
+                if($pigInfo['qiang_doge']>0){
+                    moneyLog($this->user_id,0,'doge',-$pigInfo['qiang_doge'],3,'抢购矿场');
+                }
+
                 $this->success('进入抢购成功');
 
             }else {
@@ -386,9 +396,20 @@ class Index extends IndexBase
         Db::name('yuyue')->where('uid', $uid)->where($userMap)->setField('status', 2);
 
         if($yuyueInfo['buy_type']==1){
-            moneyLog($yuyueInfo['uid'], 0, 'pay_points', $yuyueInfo['pay_points'], 4, '抢购未中奖立返');
+            if($yuyueInfo['pay_points']>0){
+                moneyLog($yuyueInfo['uid'], 0, 'pay_points', $yuyueInfo['pay_points'], 4, '抢购未中奖立返');
+            }
+            if($yuyueInfo['pay_doge']>0){
+                moneyLog($yuyueInfo['uid'], 0, 'doge', $yuyueInfo['pay_doge'], 4, '抢购未中奖立返');
+            }
+
         }else{
-            moneyLog($yuyueInfo['uid'], 0, 'pay_points', $yuyueInfo['pay_points'], 4, '预约未中奖立返');
+            if($yuyueInfo['pay_points']>0){
+                moneyLog($yuyueInfo['uid'], 0, 'pay_points', $yuyueInfo['pay_points'], 4, '预约未中奖立返');
+            }
+            if( $yuyueInfo['pay_doge']){
+                moneyLog($yuyueInfo['uid'], 0, 'doge', $yuyueInfo['pay_doge'], 4, '抢购未中奖立返');
+            }
         }
         return 2;
     }
