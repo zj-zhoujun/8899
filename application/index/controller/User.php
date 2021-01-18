@@ -577,21 +577,35 @@ class User extends IndexBase
         $id = $this->request->param('id');
         //echo $id;
         if ($this->request->isPost()) {
+//            $data = $this->request->post();
+//            $paypwd = $data['data']['paypwd'];
+//            if (md5($paypwd.config('salt')) != $this->user['pay_password']) {
+//                $this->error('二级密码不正确');
+//            }
+//            //支付凭证
+//            $voucher = $data['data']['imgs'];
+//            if (empty($voucher)) {
+//                $this->error('请上传支付凭证');
+//            }
+//            //改变订单状态
+//            $re = Db::name('pig_order')
+//                ->where('id',$data['data']['order_id'])
+//                ->setField(['status'=>2,'update_time'=>time(),'voucher'=>'/'.$voucher]);
+//            $re ? $this->success('支付成功') : $this->error('支付失败');
+
+
             $data = $this->request->post();
-            $paypwd = $data['data']['paypwd'];
-            if (md5($paypwd.config('salt')) != $this->user['pay_password']) {
-                $this->error('二级密码不正确');
+            dump($data);exit;
+            if ($data['number']<0 || !is_numeric($data['number'])) $this->error('数目不合法');
+            $params = [];
+            $params['number'] = $data['number'];
+            $params['pay_type'] = $data['pay_type'];
+
+            $rs = model('User')->pay($this->user_id,$params['number'],$params['pay_type'],'share_integral','order',$id);
+            if(!$rs['status']){
+                $this->error($rs['msg']);
             }
-            //支付凭证
-            $voucher = $data['data']['imgs'];
-            if (empty($voucher)) {
-                $this->error('请上传支付凭证');
-            }
-            //改变订单状态
-            $re = Db::name('pig_order')
-                ->where('id',$data['data']['order_id'])
-                ->setField(['status'=>2,'update_time'=>time(),'voucher'=>'/'.$voucher]);
-            $re ? $this->success('支付成功') : $this->error('支付失败');
+            header("Location:{$rs['data']['url']}");
         }
         $detail = Db::name('pig_order')->where('id',$id)->find();
         $buyinfo = Db::name('user')->where('id',$detail['uid'])->field('id,nickname,mobile')->find();

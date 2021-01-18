@@ -232,7 +232,7 @@ class User extends Model
         dump($prelArr);die;
     }
 
-    public function pay($user_id,$number,$pay_type,$wallet){
+    public function pay($user_id,$number,$pay_type,$wallet,$type='recharge',$data_id=0){
         $result = ['status'=>false,'msg'=>'','data'];
         $pay_type_arr = [
             'ali' => 1,
@@ -253,6 +253,8 @@ class User extends Model
         $data['uid'] = $user_id;
         $data['w_time'] = time();
         $data['wallet'] = $wallet;
+        $data['type'] = $type;
+        $data['data_id'] = $data_id;
         Db::name('pay_order')->insertGetId($data);
         $pay = codepay\Codepay::pay($params);
 

@@ -119,19 +119,43 @@ class Pay extends controller
             $data_u['pay_time'] = time();
             $data_u['pay_no'] = $pay_no;
             Db::name('pay_order')->where('pay_id',$pay_id)->update($data_u);
-            $log = [
-                'user_id' => $info['uid'],
-                'username' => model('User')->where('id', $info['uid'])->value('mobile'),
-                'from_id' => 0,
-                'currency' => $info['wallet'],
-                'amount' => $money,
-                'type' => 3,
-                'note' => '在线充值',
-                'create_time' => date('Y-m-d H:i:s')
-            ];
-            $log['from_username'] =  '在线充值';
-            Db::name('money_log')->insert($log);
-            Db::name('user')->where('id', $info['uid'])->setInc($info['wallet'], $money);
+            //充值
+            if($info['type']=='recharge'){
+                $log = [
+                    'user_id' => $info['uid'],
+                    'username' => model('User')->where('id', $info['uid'])->value('mobile'),
+                    'from_id' => 0,
+                    'currency' => $info['wallet'],
+                    'amount' => $money,
+                    'type' => 3,
+                    'note' => '在线充值',
+                    'create_time' => date('Y-m-d H:i:s')
+                ];
+                $log['from_username'] =  '在线充值';
+                Db::name('money_log')->insert($log);
+                Db::name('user')->where('id', $info['uid'])->setInc($info['wallet'], $money);
+            }elseif($info['type']=='order'){
+                $order_info = Db::name('pig_order')
+                    ->where('id',$info['data_id'])
+                    ->find();
+                $log = [
+                    'user_id' => $order_info['uid'],
+                    'username' => model('User')->where('id', $info['uid'])->value('mobile'),
+                    'from_id' => 0,
+                    'currency' => $info['wallet'],
+                    'amount' => $money,
+                    'type' => 3,
+                    'note' => '宠物交易',
+                    'create_time' => date('Y-m-d H:i:s')
+                ];
+                $log['from_username'] =  '在线充值';
+                Db::name('money_log')->insert($log);
+                Db::name('user')->where('id', $info['uid'])->setInc($info['wallet'], $money);
+                //宠物订单支付
+                $re = Db::name('pig_order')
+                    ->where('id',$info['data_id'])
+                    ->setField(['status'=>2,'update_time'=>time()]);
+            }
             Db::commit();
             exit('success'); //返回成功 不要删除哦
         }

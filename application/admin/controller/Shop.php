@@ -340,7 +340,25 @@ class Shop extends AdminBase
         $data['audit_time']=time();
         $data['status']=1;
         //$data['msg']='处理成功';
+        Db::startTrans();
+        $info = Db::name('dog_sell')->where('id',$id)->find();
+        if($data['status']==1){
+            $log = [
+                'user_id' => $info['uid'],
+                'username' => model('User')->where('id', $info['uid'])->value('mobile'),
+                'from_id' => 0,
+                'currency' => 'pay_point',
+                'amount' => $info['real_money'],
+                'type' => 3,
+                'note' => '狗狗币卖出',
+                'create_time' => date('Y-m-d H:i:s')
+            ];
+            $log['from_username'] =  '在线充值';
+            Db::name('money_log')->insert($log);
+            Db::name('user')->where('id', $info['uid'])->setInc('pay_point', $info['real_money']);
+        }
         $re=Db::name('dog_sell')->where('id',$id)->update($data);
+        Db::commit();
         if($re){
             $this->success('处理成功');
         }else{

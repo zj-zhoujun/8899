@@ -80,109 +80,29 @@
           <!-- <div class="fs26">区块状态：<span class="fw_b"></span></div> -->
           <!-- <div class="fs26">收益状态：<span class="fw_b ">等待收益</span></div> -->
         </div>
-        <div class="makeOverPay">
-            {volist name="payment" id="val"}
-            {eq name="val.type" value="3"}
-            <br/>
-
-            <div class="payBox">
-                <img src="/public/static/index/assets/images/bank.png" alt="">
-                <div>
-                    <div class="fs26">账户名称：<span>{$val.name}</span></div>
-                    <div class="fs26">银行卡卡号：<span>{$val.account}</span></div>
-                    <div class="fs26">开户银行：<span>{$val.bank_name}</span></div>
-                    <div class="fs26">开户支行：<span>{$val.branch_name}</span></div>
-                    <div class="fs26">账户类型：<span>银行卡支付</span></div>
-                </div>
-                <!--<div class="weui-cells__title  fs28 color_3 fw_b" style="padding-left:0">收款二维码</div>
-                <div class="weui-cells weui-cells_form">
-                    <div class="weui-cell fileBox" style="padding-left: 0px">
-                        <div class="weui-cell__bd">
-                            <img src="{$val.qrcode_url}" width="335px"  class="qrcode_url" onclick="show('{$val.qrcode_url}')" />
-                        </div>
-                    </div>
-                </div>-->
-            </div>
-            <br/>
-
-            {/eq}
-            {eq name="val.type" value="2"}
-
-            <div class="payBox disrcc">
-               <img src="/public/static/index/assets/images/weixinpay.png" alt="">
-               <div class="flex3">
-                 <div class="fs26">账户名称：<span>{$val.name}</span></div>
-                 <div class="fs26">账户号：<span>{$val.account}</span></div>
-                 <div class="fs26">账户类型：<span>微信支付</span></div>
-               </div>
-                  <div class="weui-cells weui-cells_form discec flex2">
-                      <div class="weui-cells__title  fs28 color_3 fw_b" style="padding-left:10px;">收款二维码</div>
-
-                      <div class="weui-cell fileBox" style="padding-left: 20px;">
-                      <div class="weui-cell__bd">
-                          <img src="{$val.qrcode_url}" width="335px"  class="qrcode_url" onclick="show('{$val.qrcode_url}')" />
-                      </div>
-                  </div>
-               </div>
-            </div>
-            <br/>
-
-
-            {/eq}
-             {eq name="val.type" value="1"}
-           <div></div>
-            <div class="payBox disrcc">
-
-              <img src="/public/static/index/assets/images/alipay.png" alt="">
-              <div class="flex3">
-                <div class="fs26">账户名称：<span>{$val.name}</span></div>
-                <div class="fs26">账户号：<span>{$val.account}</span></div>
-                <div class="fs26">账户类型：<span>支付宝支付</span></div>
-              </div>
-              <div class="weui-cells weui-cells_form discec flex2">
-                  <div class="weui-cells__title  fs28 color_3 fw_b" style="padding-left:10px;">收款二维码</div>
-
-                  <div class="weui-cell fileBox" style="padding-left: 20px;">
-                      <div class="weui-cell__bd">
-                          <img src="{$val.qrcode_url}" width="335px"  class="qrcode_url" onclick="show('{$val.qrcode_url}')" />
-                      </div>
-                  </div>
-              </div>
-
-            </div>
-            <br/>
-
-            {/eq}
-             {/volist}
-        </div>
-
         <div class="fromBox">
+            <form method="post" action="{:url('adopt_detail')}">
+                <input type="hidden" name="number" value="{$detail.price}" />
+                <input type="hidden" name="id" value="{$detail.id}" />
             <div class="weui-cells weui-cells_form">
- 
-            <div class="weui-cells__title  fs28 color_3 fw_b" style="padding-left:0">付款凭证</div>
-            <div class="weui-cells weui-cells_form">
-                <div class="weui-cell fileBox" style="padding-left: 0px">
-                  <div class="weui-cell__bd">
-                    <img src="" width="335px" style="height: 2.333333rem;" id="img" onclick="showimg()">
-                    <input id="uploaderInput" class="weui-uploader__input imgs" type="file" accept="image/*" />
-                  </div>
-                </div>
-              </div>
                <div class="hide">
-                <div class="weui-cells__title  fs28 color_3 fw_b" style="padding-left:0">二级密码</div>
+                <div class="weui-cells__title  fs28 color_3 fw_b" style="padding-left:0">支付方式</div>
                 <div class="weui-cells weui-cells_form">
                   <div class="weui-cell">
                     <div class="weui-cell__bd">
-                      <input class="weui-input fs28 fw_b paypwd" type="password" placeholder="请输入二级密码"/>
+                        <select name="pay_type" class="select pay_type">
+                            <option value="ali">支付宝</option>
+                            <option value="wx">微信</option>
+                            <option value="qq">qq钱包</option>
+                        </select>
                     </div>
                   </div>
-                </div> 
-         
-
-            <div class="butBox"><div class="but">确认</div>
+                </div>
+            <div class="butBox"><div class="but"><input type="submit" value="立即充值" /></div>
           </div>
       </div>
       </div>
+        </form>
     </div>
 <style type="text/css">
     .baocun{
