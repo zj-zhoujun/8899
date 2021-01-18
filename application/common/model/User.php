@@ -8,6 +8,7 @@ namespace app\common\model;
 
 use think\Model;
 use think\Db;
+use codepay;
 
 class User extends Model
 {
@@ -229,5 +230,34 @@ class User extends Model
             echo '<br/>';
         }
         dump($prelArr);die;
+    }
+
+    public function pay($user_id,$number,$pay_type,$wallet){
+        $result = ['status'=>false,'msg'=>'','data'];
+        $pay_type_arr = [
+            'ali' => 1,
+            'qq' => 2,
+            'wx' => 3,
+        ];
+        if(empty($pay_type_arr[$pay_type])){
+            $result['msg'] = '充值方式错误';
+            return $result;
+        }
+        $params = [
+            'pay_id' => build_order_no(),
+            'total_amount' => $number,
+            'pay_type' => $pay_type_arr[$pay_type],
+            'ext' => ['充值狗狗币'],
+        ];
+        $data = $params;
+        $data['uid'] = $user_id;
+        $data['w_time'] = time();
+        $data['wallet'] = $wallet;
+        Db::name('pay_order')->insertGetId($data);
+        $pay = codepay\Codepay::pay($params);
+
+        $result['status'] = true;
+        $result['data'] = $pay;
+        return $result;
     }
 }

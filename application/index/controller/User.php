@@ -182,6 +182,31 @@ class User extends IndexBase
     }
 
     /**
+     * DOGE充值
+     * @return \think\response\View
+     */
+    public function doge_recharge()
+    {
+        $config = unserialize(Db::name('system')->where('name','base_config')->value('value'));
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            //dump()
+            if ($data['number']<0 || !is_numeric($data['number'])) $this->error('数目不合法');
+            $params = [];
+            $params['number'] = $data['number'];
+            $params['pay_type'] = $data['pay_type'];
+
+            $rs = model('User')->pay($this->user_id,$params['number'],$params['pay_type'],'doge');
+            if(!$rs['status']){
+                $this->error($rs['msg']);
+            }
+            header("Location:{$rs['data']['url']}");
+
+        }
+        return view()->assign(['doge_tx_sxf'=>$config['doge_sxf']]);
+    }
+
+    /**
      * DOGE卖出（卖到平台了，平台回收）
      * @return \think\response\View
      */
