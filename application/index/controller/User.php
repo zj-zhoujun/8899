@@ -283,6 +283,30 @@ class User extends IndexBase
     }
 
     /**
+     * 微分充值
+     * @return \think\response\View
+     */
+    public function point_recharge ()
+    {
+        $rechargeMode = Db::name('recharge_mode')->find();
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            //dump($data);exit;
+            if ($data['number']<0 || !is_numeric($data['number'])) $this->error('数目不合法');
+            $params = [];
+            $params['number'] = $data['number'];
+            $params['pay_type'] = $data['pay_type'];
+
+            $rs = model('User')->pay($this->user_id,$params['number'],$params['pay_type'],'pay_point');
+            if(!$rs['status']){
+                $this->error($rs['msg']);
+            }
+            header("Location:{$rs['data']['url']}");
+        }
+        return view()->assign('ewm',$rechargeMode);
+    }
+
+    /**
      * 微分转增
      * @return \think\response\View
      * @throws \think\Exception
