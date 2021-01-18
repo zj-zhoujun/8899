@@ -284,5 +284,11 @@ return [
         'gatewayUrl' => "https://openapi.alipay.com/gateway.do",
         //支付宝公钥,查看地址：https://openhome.alipay.com/platform/keyManage.htm 对应APPID下的支付宝公钥。
         'alipay_public_key' => "2",
+    ],
+    //支付宝配置信息
+    'codepay' =>[
+        'key' => "20u8S4G5L6UCSfT9UAwhawCDUQqNAHzQ",
+        //商户私钥
+        'id' => 600985,
     ]
 ];
