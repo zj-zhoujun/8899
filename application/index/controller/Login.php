@@ -277,34 +277,7 @@ class Login extends Controller
 
                 moneyLog($user_id,0,'pay_points',$pay_points,10,'注册赠送电力');
 
-                //赠送宠物
-                $pigInfo = model('Pig')->where(['is_reward'=>1])->find();
-                $price = 0;
-                $saveDate = [];
-                $saveDate['uid'] = $user_id;
-                $saveDate['pig_id'] = $pigInfo['id'];
-                $saveDate['pig_name'] = $pigInfo['name'];
-                $saveDate['price'] = $price;
-                $saveDate['contract_revenue'] = $pigInfo['contract_revenue'];
-                $saveDate['cycle'] = $pigInfo['cycle'];
-                $saveDate['doge'] = $pigInfo['doge'];
-                $saveDate['pig_no'] = create_trade_no();
-                $saveDate['status'] = 1;
-                $saveDate['create_time'] = time();
-                $saveDate['end_time'] = time()+$pigInfo['cycle']*24*3600;
-                $sell_id = Db::name('user_pigs')->insertGetId($saveDate);
-                //生成订单
-                $sellOrder = [];
-                $sellOrder['order_no'] = create_trade_no();
-                $sellOrder['uid'] = $user_id;
-                $sellOrder['pig_id'] = $pigInfo['id'];
-                $sellOrder['source_price'] = $price;
-                $sellOrder['price'] = $price;
-                $sellOrder['pig_name'] = $pigInfo['name'];
-                $sellOrder['create_time'] = time();
-                $sellOrder['sell_id'] = 0;
-                $order_id = Db::name('PigOrder')->insertGetId($sellOrder);
-                Db::name('user_pigs')->where('id',$sell_id)->update(['order_id'=>$order_id]);
+
                 Db::commit();
                 $this->success('注册成功！',url('login/downapp'));
 

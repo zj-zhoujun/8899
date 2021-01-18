@@ -384,10 +384,15 @@ class Plan extends Controller
         if(!$list){
             die('暂无数据');
         }
+        $task_list = Db::name('task_config')->where(1)->column('health_cycle','id');
         //每两天生病一次
         foreach($list as $v){
+            $health_cycle = $task_list[$v['pig_id']]?:0;
+            if($health_cycle<=0){
+                continue;
+            }
             $health_time = $v['health_time']?:$v['create_time'];
-            $next_time = $health_time+86400*2;
+            $next_time = $health_time+86400*$health_cycle;
             if($next_time){
                 Db::name('user_pigs')->where('id',$v['id'])->update(['health'=>1,'health_time'=>time()]);
                 Db::name('pig_order')->where('id',$v['order_id'])->update(['health'=>1]);
