@@ -185,8 +185,9 @@ class Active extends IndexBase
         $sellOrder['price'] = $price;
         $sellOrder['pig_name'] = $pigInfo['name'];
         $sellOrder['create_time'] = time();
-        $sellOrder['sell_id'] = 0;
+        $sellOrder['sell_id'] = $sell_id;
         $order_id = Db::name('PigOrder')->insertGetId($sellOrder);
+        Db::name('user_pigs')->where('id',$sell_id)->update(['order_id'=>$order_id]);
 
         return ['status'=>true,'msg'=>''];
     }
