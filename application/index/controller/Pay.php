@@ -85,7 +85,7 @@ class Pay extends controller
     public function return_pay(){
         file_put_contents('codepay.txt',date('Ymd H:i:s').'return::'.json_encode($_REQUEST)."\r\n",FILE_APPEND);
         $config = config('codepay');
-        $data = $_POST;
+        $data = $_REQUEST;
         //dump($data);exit;
         unset($data['s']);
         ksort($data); //排序post参数
@@ -98,6 +98,7 @@ class Pay extends controller
             $sign .= "$key=$val"; //拼接为url参数形式
         }
         if (!$data['pay_no'] || md5($sign . $codepay_key) != $data['sign']) { //不合法的数据
+            $this->error('支付失败！',url('user/index'));
             exit('fail');  //返回失败 继续补单
         } else { //合法的数据
             //业务处理
@@ -109,9 +110,11 @@ class Pay extends controller
             Db::startTrans();
             $info = Db::name('pay_order')->where('pay_id',$pay_id)->lock(true)->find();
             if(!$info){
+                $this->error('支付失败！',url('user/index'));
                 exit('fail');
             }
             if($info['status']==1){
+                $this->success('支付成功！',url('user/index'));
                 exit('success');
             }
             $data_u = [];
@@ -157,6 +160,7 @@ class Pay extends controller
                     ->setField(['status'=>2,'update_time'=>time()]);
             }
             Db::commit();
+            $this->success('支付成功！',url('user/index'));
             exit('success'); //返回成功 不要删除哦
         }
     }

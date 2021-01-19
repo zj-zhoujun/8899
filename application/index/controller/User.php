@@ -297,7 +297,7 @@ class User extends IndexBase
             $params['number'] = $data['number'];
             $params['pay_type'] = $data['pay_type'];
 
-            $rs = model('User')->pay($this->user_id,$params['number'],$params['pay_type'],'pay_point');
+            $rs = model('User')->pay($this->user_id,$params['number'],$params['pay_type'],'pay_points');
             if(!$rs['status']){
                 $this->error($rs['msg']);
             }
