@@ -226,7 +226,7 @@ class User extends IndexBase
             $saveDate['username'] = $this->user['username'];
             $saveDate['num'] = $data['data']['number'];
             $saveDate['price']  = $price;
-            $saveDate['real_money'] = bcmul($data['data']['number'],$price);
+            $saveDate['real_money'] = bcmul($data['data']['number'],$price,2);
             $saveDate['w_time'] = time();
             $re = Db::name('dog_sell')->insert($saveDate);
             if ($re) {
@@ -595,7 +595,6 @@ class User extends IndexBase
 
 
             $data = $this->request->post();
-            dump($data);exit;
             if ($data['number']<0 || !is_numeric($data['number'])) $this->error('数目不合法');
             $params = [];
             $params['number'] = $data['number'];

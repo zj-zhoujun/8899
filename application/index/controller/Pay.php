@@ -148,7 +148,7 @@ class Pay extends controller
                     'currency' => $info['wallet'],
                     'amount' => $money,
                     'type' => 3,
-                    'note' => '宠物交易',
+                    'note' => '卖出宠物收益',
                     'create_time' => date('Y-m-d H:i:s')
                 ];
                 $log['from_username'] =  '在线充值';

@@ -347,15 +347,15 @@ class Shop extends AdminBase
                 'user_id' => $info['uid'],
                 'username' => model('User')->where('id', $info['uid'])->value('mobile'),
                 'from_id' => 0,
-                'currency' => 'pay_point',
+                'currency' => 'pay_points',
                 'amount' => $info['real_money'],
                 'type' => 3,
                 'note' => '狗狗币卖出',
                 'create_time' => date('Y-m-d H:i:s')
             ];
-            $log['from_username'] =  '在线充值';
+            $log['from_username'] =  '狗狗币卖出';
             Db::name('money_log')->insert($log);
-            Db::name('user')->where('id', $info['uid'])->setInc('pay_point', $info['real_money']);
+            Db::name('user')->where('id', $info['uid'])->setInc('pay_points', $info['real_money']);
         }
         $re=Db::name('dog_sell')->where('id',$id)->update($data);
         Db::commit();
