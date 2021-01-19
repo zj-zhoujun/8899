@@ -203,7 +203,7 @@ class User extends IndexBase
             header("Location:{$rs['data']['url']}");
 
         }
-        return view()->assign(['doge_tx_sxf'=>$config['doge_sxf']]);
+        return view()->assign(['doge_tx_sxf'=>$config['doge_sxf'],'recharge_bili'=>$config['recharge_to_doge']]);
     }
 
     /**
@@ -303,7 +303,10 @@ class User extends IndexBase
             }
             header("Location:{$rs['data']['url']}");
         }
-        return view()->assign('ewm',$rechargeMode);
+        $config = unserialize(Db::name('system')->where('name','base_config')->value('value'));
+        $this->assign('recharge_bili',$config['recharge_to_point']);
+        $this->assign('ewm',$rechargeMode);
+        return $this->fetch();
     }
 
     /**

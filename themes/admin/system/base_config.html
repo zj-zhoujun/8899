@@ -42,7 +42,25 @@
 
                     </div>
                     <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
-                        <legend>狗狗币配置</legend>
+                        <legend>充值配置</legend>
+                    </fieldset>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">1元兑换狗币</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="recharge_to_doge" placeholder="" autocomplete="off" class="layui-input"  value="{$base_config['recharge_to_doge']|default=''}">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">1元兑换微分</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="recharge_to_point" placeholder="" autocomplete="off" class="layui-input"  value="{$base_config['recharge_to_point']|default=''}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+                        <legend>狗狗币卖出配置</legend>
                     </fieldset>
                     <div class="layui-form-item">
                         <div class="layui-inline">

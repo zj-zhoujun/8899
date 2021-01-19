@@ -49,13 +49,14 @@
         <!-- 页面内容 -->
         <form action="{:url('point_recharge')}" method="post">
             <div class="fromBox">
-                <div class="weui-cells__title  fs28 color_3 fw_b">充值数量</div>
+                <div class="weui-cells__title  fs28 color_3 fw_b">充值金额</div>
                 <div class="weui-cells weui-cells_form">
                     <div class="weui-cell">
                         <div class="weui-cell__bd">
-                            <input class="weui-input fs28 fw_b number" name="number" type="text" placeholder="请输入充值数量"/>
+                            <input class="weui-input fs28 fw_b number" name="number" type="text" placeholder="请输入充值金额"/>
                         </div>
                     </div>
+                    <div class="tips fs24 color_3">充值比例：1元={$recharge_bili}微分</div>
                 </div>
 
                 <div class="weui-cells__title  fs28 color_3 fw_b">支付方式</div>
