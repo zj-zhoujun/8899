@@ -18,7 +18,7 @@
 
 
 
-    <title>抢矿记录</title>
+    <title>抢宠记录</title>
 
   </head>
 
@@ -105,7 +105,7 @@
          
     </div>
 
-    <div class="header-title">抢矿记录</div>
+    <div class="header-title">抢宠记录</div>
 
     <div class="header-right">
 
@@ -125,11 +125,11 @@
 
           <div class="weui-navbar">
 
-            <a class="weui-navbar__item weui-bar__item--on color_9" href="#tab1">抢矿中
+            <a class="weui-navbar__item weui-bar__item--on color_9" href="#tab1">抢宠中
 
             </a>
 
-            <a class="weui-navbar__item color_9" href="#tab2"> 已抢矿 </a>
+            <a class="weui-navbar__item color_9" href="#tab2"> 已抢宠 </a>
 
             <a class="weui-navbar__item color_9" href="#tab3"> 取消/申訴 </a>
 
@@ -159,7 +159,7 @@
 
                 <div class="content fs26 color_3">
 
-                  <div>矿场:{$vl.pig_info.name}</div>
+                  <div>宠物:{$vl.pig_info.name}</div>
 
                   <div>价值：<span class="color_r fw_b">{$vl.price}</span>≈{$vl.price}PIG</div>
 
@@ -167,7 +167,7 @@
 				  
 				  <div>获取收益：<span class="color_r fw_b">{php}echo round(($vl['price']*($vl['pig_info']['contract_revenue']/100))/$vl['pig_info']['cycle'],2);{/php}/天</span></div>
 
-                  <div>抢矿時間：{$vl.create_time|date="Y.m.d H:i:s",###}</div>
+                  <div>抢宠時間：{$vl.create_time|date="Y.m.d H:i:s",###}</div>
 
                   {eq name="vl.status" value="1"}
 
@@ -221,7 +221,7 @@
 
                 <div class="content fs26 color_3">
 
-                  <div>矿场：{$vl.pig_info.name}</div>
+                  <div>宠物：{$vl.pig_info.name}</div>
 
                   <div>价值：<span class="color_r fw_b">{$vl.price}</span>≈{$vl.price}PIG</div>
 
@@ -231,7 +231,7 @@
 				  
                   <!-- <div>获得收益：<span class="color_r fw_b">{php}echo round(($vl['price']*($vl['pig_info']['contract_revenue']/100))/$vl['pig_info']['cycle'],2);{/php}</span></div> -->
 
-                  <div>抢矿时间：{$vl.create_time|date="Y.m.d H:i:s",###}</div>
+                  <div>抢宠时间：{$vl.create_time|date="Y.m.d H:i:s",###}</div>
                   <div>
                     宠物状态：
                     {if condition="$vl['health'] eq 0"}
