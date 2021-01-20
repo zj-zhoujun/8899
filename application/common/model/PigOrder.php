@@ -45,29 +45,29 @@ class PigOrder extends Model
             }
 
             $userPig['uid'] = $orderInfo['uid'];
-            //$userPig['order_id'] = $id;
-            //$userPig['pig_id'] = $orderInfo['pig_id'];
-            //$userPig['pig_name'] = $orderInfo['pig_name'];
-            //$userPig['pig_no'] = create_trade_no();
-            //$userPig['cycle'] = $pigInfo['cycle'];
-            //$userPig['contract_revenue'] = $pigInfo['contract_revenue'];
-            //$userPig['doge'] = $pigInfo['doge'];
+            $userPig['order_id'] = $id;
+            $userPig['pig_id'] = $orderInfo['pig_id'];
+            $userPig['pig_name'] = $orderInfo['pig_name'];
+            $userPig['pig_no'] = create_trade_no();
+            $userPig['cycle'] = $pigInfo['cycle'];
+            $userPig['contract_revenue'] = $pigInfo['contract_revenue'];
+            $userPig['doge'] = $pigInfo['doge'];
             $userPig['status'] = 0;
             $userPig['from_id'] = $orderInfo['sell_id'];
             $userPig['price'] = $orderInfo['price'];
             $userPig['create_time'] = time();
             $userPig['end_time'] = time()+$pigInfo['cycle']*24*3600-$sell_end_time;
-            Db::name('user_pigs')->where('order_id',$id)->update($userPig);
+            Db::name('user_pigs')->insert($userPig);
             //销毁原来的猪
 //            $map = [];
 //            $map['order_id'] = $id;
 //            $map['uid'] = $orderInfo['sell_id'];
 //            Db::name('user_pigs')->where($map)->setField('status',2);
             //奖励PIG
-            moneyLog($orderInfo['uid'],0,'pig',$pigInfo['pig'],9,'买入奖励wia');
+            //moneyLog($orderInfo['uid'],0,'pig',$pigInfo['pig'],9,'买入奖励wia');
 
             //奖金记录
-            addReward($orderInfo['uid'],0,'pig',$pigInfo['pig'],5,'交易奖励wia');
+            addReward($orderInfo['sell_id'],0,'pig',$orderInfo['price'],5,'交易奖励wia');
             return true;
         } else{
             //$this->error('操作失败');

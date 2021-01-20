@@ -455,11 +455,11 @@ class User extends IndexBase
                 $sellOrder['price'] = $data['data']['number'];
                 $sellOrder['pig_name'] = $pigInfo['name'];
                 $sellOrder['create_time'] = time();
-                $sellOrder['sell_id'] = 0;
+                $sellOrder['sell_id'] = $this->user_id;
                 $order_id = Db::name('PigOrder')->insertGetId($sellOrder);
                 if ($rs && $order_id) {
                     //更新用户猪对应的订单号
-                    Db::name('user_pigs')->where('id',$sell_id)->update(['order_id'=>$order_id,'end_time'=>time()]);
+                    Db::name('user_pigs')->where('id',$id)->update(['order_id'=>$order_id,'end_time'=>time()]);
                     //推广收益减少记录
                    // moneyLog($this->user_id,$this->user_id,$sharetype,-$saveDate['price'],2,'售出'.$sharetypename);
                     $this->success('出售成功');
