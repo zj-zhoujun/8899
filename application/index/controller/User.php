@@ -428,65 +428,24 @@ class User extends IndexBase
             //数目检测
             if ($data['data']['number']<=0 || !is_numeric($data['data']['number'])) $this->error('数目不合法');
 
-            $sharetype = 'share_integral';
-            $sharetypename = '推广收益';
-            if($data['data']['typeid']==0){
-                if ($data['data']['number']>$baseConfig['sare_sell_max'] || $data['data']['number']<$baseConfig['sare_sell_min']) {
-                    $this->error('请输入'.$baseConfig['sare_sell_min'].'--'.$baseConfig['sare_sell_max'].'的'.$sharetypename.'出售数目');
-                }
-                $sharetype = 'share_integral';
-                $sharetypename = '推广收益';
-            }else if($data['data']['typeid']==1){
-                if ($data['data']['number']>$baseConfig['team_sell_max'] || $data['data']['number']<$baseConfig['team_sell_min']) {
-                    $this->error('请输入'.$baseConfig['team_sell_min'].'--'.$baseConfig['team_sell_max'].'的'.$sharetypename.'出售数目');
-                }
-                $sharetype = 'team_integral';
-                $sharetypename = '团队收益';
-            }else{
-                if ($data['data']['number']>$baseConfig['zc_sell_max'] || $data['data']['number']<$baseConfig['zc_sell_min']) {
-                    $this->error('请输入'.$baseConfig['zc_sell_min'].'--'.$baseConfig['zc_sell_max'].'的'.$sharetypename.'出售数目');
-                }
-                $sharetype = 'zc_integral';
-                $sharetypename = '收益转存';
-            }
 
-            if ($data['data']['number']>$this->user[$sharetype]) $this->error($sharetypename.'余额不足');
-
-            //最大值
-            $maxPrice = Db::name('task_config')->max('max_price');
-            //最小值
-            $minPrice = $baseConfig['sell_min'];
-
-            if ($data['data']['number']>$maxPrice || $data['data']['number']<$minPrice) {
-                $this->error('请输入'.$minPrice.'--'.$maxPrice.'的出售数目');
+            $id = $data['data']['pid']?:0;
+            $info = Db::name('user_pigs')->where(['uid'=>$this->user_id,'id'=>$id])->find();
+            if(!$info || $info['status']!=1){
+                $this->error('数据不存在或宠物状态不可出售！');
             }
             //检测对应的猪的级别
-            if(isset($data['data']['pid'])&&$data['data']['pid']){
-                $pigInfo = model('Pig')->where(['id'=>$data['data']['pid']])->find();
+            $pigInfo = model('Pig')->where(['id'=>$info['pid']])->find();
 
-                if($pigInfo['max_price']<$data['data']['number'] || $pigInfo['min_price']>$data['data']['number']){
-                    $this->error('请输入'.$pigInfo['name'].'的出售区间'.$pigInfo['min_price'].'--'.$pigInfo['max_price']);
-                }
-            }else{
-                $pigInfo = model('Pig')->pigLevel($data['data']['number']);
+            if($pigInfo['max_price']<$data['data']['number'] || $pigInfo['min_price']>$data['data']['number']){
+                $this->error('请输入'.$pigInfo['name'].'的出售区间'.$pigInfo['min_price'].'--'.$pigInfo['max_price']);
             }
+
             if($pigInfo['selled_stock'] < $pigInfo['max_stock'] ){
                 //扣減库存
                 model('Pig')->where(['id'=>['eq',$pigInfo['id']], 'selled_stock'=>['lt', $pigInfo['max_stock']]])->setInc('selled_stock');
                 //dump($pigInfo);
-                $saveDate = [];
-                $saveDate['uid'] = $this->user_id;
-                $saveDate['pig_id'] = $pigInfo['id'];
-                $saveDate['pig_name'] = $pigInfo['name'];
-                $saveDate['price'] = $data['data']['number'];
-                $saveDate['contract_revenue'] = $pigInfo['contract_revenue'];
-                $saveDate['cycle'] = $pigInfo['cycle'];
-                $saveDate['doge'] = $pigInfo['doge'];
-                $saveDate['pig_no'] = create_trade_no();
-                $saveDate['status'] = 1;
-                $saveDate['create_time'] = time();
-                $saveDate['end_time'] = time()+$pigInfo['cycle']*24*3600;
-                $sell_id = Db::name('user_pigs')->insertGetId($saveDate);
+                $rs = Db::name('user_pigs')->where('id',$id)->update(['status'=>2]);
                 //生成订单
                 $sellOrder = [];
                 $sellOrder['order_no'] = create_trade_no();
@@ -498,11 +457,11 @@ class User extends IndexBase
                 $sellOrder['create_time'] = time();
                 $sellOrder['sell_id'] = 0;
                 $order_id = Db::name('PigOrder')->insertGetId($sellOrder);
-                if ($sell_id && $order_id) {
+                if ($rs && $order_id) {
                     //更新用户猪对应的订单号
                     Db::name('user_pigs')->where('id',$sell_id)->update(['order_id'=>$order_id,'end_time'=>time()]);
                     //推广收益减少记录
-                    moneyLog($this->user_id,$this->user_id,$sharetype,-$saveDate['price'],2,'售出'.$sharetypename);
+                   // moneyLog($this->user_id,$this->user_id,$sharetype,-$saveDate['price'],2,'售出'.$sharetypename);
                     $this->success('出售成功');
                 } else {
                     $this->error('出售失败');
@@ -512,7 +471,12 @@ class User extends IndexBase
             }
 
         }
-        $piglist = model('Pig')->where('selled_stock < max_stock')->select();
+        $piglist = Db::name('user_pigs')
+            ->alias('u')
+            ->join('task_config t','u.pig_id=t.id')
+            ->where(['u.uid'=>$this->user_id,'u.status'=>1])
+            ->field('u.id,t.name,t.min_price,t.max_price,t.start_time,t.end_time')
+            ->select();
         return view()->assign(['piglist'=>$piglist]);
     }
 
