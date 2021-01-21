@@ -91,6 +91,13 @@ class Pay extends controller
                 $order_info = Db::name('pig_order')
                     ->where('id',$info['data_id'])
                     ->find();
+                //更改付款状态
+                Db::name('pig_order')
+                    ->where('id',$info['data_id'])
+                    ->update(['status'=>2,'update_time'=>time()]);
+                Db::name('user_pigs')
+                    ->where('order_id',$info['data_id'])
+                    ->update(['status'=>1]);
                 $log = [
                     'user_id' => $order_info['uid'],
                     'username' => model('User')->where('id', $info['uid'])->value('mobile'),
@@ -101,7 +108,7 @@ class Pay extends controller
                     'note' => '卖出宠物收益',
                     'create_time' => date('Y-m-d H:i:s')
                 ];
-                $log['from_username'] =  '在线充值';
+                $log['from_username'] =  '卖出宠物收益';
                 Db::name('money_log')->insert($log);
                 Db::name('user')->where('id', $info['uid'])->setInc($info['wallet'], $money);
                 //宠物订单支付
@@ -181,6 +188,13 @@ class Pay extends controller
                 $order_info = Db::name('pig_order')
                     ->where('id',$info['data_id'])
                     ->find();
+                //更改付款状态
+                Db::name('pig_order')
+                    ->where('id',$info['data_id'])
+                    ->update(['status'=>2,'update_time'=>time()]);
+                Db::name('user_pigs')
+                    ->where('order_id',$info['data_id'])
+                    ->update(['status'=>1]);
                 $log = [
                     'user_id' => $order_info['uid'],
                     'username' => model('User')->where('id', $info['uid'])->value('mobile'),
@@ -191,7 +205,7 @@ class Pay extends controller
                     'note' => '卖出宠物收益',
                     'create_time' => date('Y-m-d H:i:s')
                 ];
-                $log['from_username'] =  '在线充值';
+                $log['from_username'] =  '卖出宠物收益';
                 Db::name('money_log')->insert($log);
                 Db::name('user')->where('id', $info['uid'])->setInc($info['wallet'], $money);
                 //宠物订单支付

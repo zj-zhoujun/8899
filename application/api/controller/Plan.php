@@ -206,7 +206,8 @@ class Plan extends Controller
             //累计收益
             Db::name('user')->where('id', $val['uid'])->setInc('totalmoney', $contract_revenue);
             //增加猪的价值
-            model('Pig')->pigUpgarde($val['id'], $contract_revenue);
+            //model('Pig')->pigUpgarde($val['id'], $contract_revenue);
+            Db::name('user_pigs')->where('id',$val['id'])->setField('status',1);
             $this->addReward($val['uid'], 0, 'doge', $doge, 5, 'DOGE收益');
             moneyLog($val['uid'], 0, 'doge', $doge, 6, 'DOGE收益');
             //上级分成

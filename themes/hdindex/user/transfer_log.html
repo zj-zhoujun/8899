@@ -116,9 +116,9 @@
                                     抢购方：{$vl.username}
                                 </div>
                                 <div>
-                                    转让时间：{$vl.create_time|date="Y.m.d H:i:s",###}
+                                    转让时间：{$vl.sell_time|date="Y.m.d H:i:s",###}
                                 </div>
-                                {eq name="vl.status" value="2"}
+                                {eq name="vl.pay_status" value="2"}
                                 <div class="confirm_time confirm_time{$vl.id}" >确认剩余时间：<span class="color_r fw_b remaining_time{$vl.id}" data-id="{$vl.id}" data-time="{$vl.update_time}"></span></div>
                                 {/eq}
 

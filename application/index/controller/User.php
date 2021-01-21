@@ -121,6 +121,7 @@ class User extends IndexBase
             $saveDate['sxf'] = $saveDate['num']*$config['pig_sxf']/100;
             $saveDate['realmoney'] = $saveDate['num']-$saveDate['sxf'];
             $saveDate['create_time'] = time();
+            $saveDate['bank_id'] = $data['data']['bank_id'];
             $re = Db::name('tixian')->insert($saveDate);
             if ($re) {
                 moneyLog($this->user_id,$this->user_id,'wia',-$saveDate['num'],7,'wia提币');
@@ -130,8 +131,9 @@ class User extends IndexBase
             }
 
         }
-
-        return view()->assign(['pig_sxf'=>$config['pig_sxf']]);
+        //银行卡列表
+        $bank_list = Db::name('user_payment')->where('uid',$this->user_id)->select();
+        return view()->assign(['pig_sxf'=>$config['pig_sxf'],'bank_list'=>$bank_list]);
     }
 
     /**
@@ -449,7 +451,7 @@ class User extends IndexBase
                 //生成订单
                 $sellOrder = [];
                 $sellOrder['order_no'] = create_trade_no();
-                $sellOrder['uid'] = $this->user_id;
+                $sellOrder['uid'] = 0;
                 $sellOrder['pig_id'] = $pigInfo['id'];
                 $sellOrder['source_price'] = $data['data']['number'];
                 $sellOrder['price'] = $data['data']['number'];
@@ -459,7 +461,7 @@ class User extends IndexBase
                 $order_id = Db::name('PigOrder')->insertGetId($sellOrder);
                 if ($rs && $order_id) {
                     //更新用户猪对应的订单号
-                    Db::name('user_pigs')->where('id',$id)->update(['order_id'=>$order_id,'end_time'=>time()]);
+                    Db::name('user_pigs')->where('id',$id)->update(['sell_time'=>time(),'status'=>2]);
                     //推广收益减少记录
                    // moneyLog($this->user_id,$this->user_id,$sharetype,-$saveDate['price'],2,'售出'.$sharetypename);
                     $this->success('出售成功');
@@ -491,12 +493,12 @@ class User extends IndexBase
         $time = time();
 
         $uid = $this->user_id;
-        $adoptLog = Db::name('pig_order')->where(['uid'=>$uid,'sell_id'=>['neq',0]])->order('id','desc')->select();
+        $adoptLog = Db::name('pig_order')->where(['uid'=>$uid])->order('id','desc')->select();
         //$user
         foreach ($adoptLog as $key=>$val) {
             $adoptLog[$key]['pig_info'] = Db::name('task_config')->where('id',$val['pig_id'])->find();
             if ($val['status']==3) {
-                $user_pig = Db::name('user_pigs')->where('order_id',$val['id'])->find();
+                $user_pig = Db::name('user_pigs')->where(['order_id'=>$val['id'],'uid'=>$uid])->find();
                 $adoptLog[$key]['user_pig'] = $user_pig;
                 $adoptLog[$key]['is_end'] = time()>$user_pig['end_time']?1:0;
             }
@@ -523,13 +525,13 @@ class User extends IndexBase
 
         $uid = $this->user_id;
         //待转让
-        $userPigs = Db::name('pig_order')->where(['sell_id'=>$this->user_id,'status'=>0])->order('id','desc')->select();
+        $userPigs = Db::name('user_pigs')->where(['uid'=>$uid,'status'=>1])->order('id','desc')->select();
         foreach ($userPigs as $k=>$v) {
 
             $userPigs[$k]['pig_info'] = Db::name('task_config')->where('id',$v['pig_id'])->find();
         }
 //        dump($userPigs);die;
-        $transferlog = Db::name('pig_order')->where('sell_id',$uid)->order('id','desc')->select();
+        $transferlog = Db::name('pig_order')->where(['sell_id'=>$uid])->order('id','desc')->select();
         foreach ($transferlog as $key=>$val) {
             $transferlog[$key]['pig_info'] = Db::name('task_config')->where('id',$val['pig_id'])->find();
             $transferlog[$key]['username'] = Db::name('user')->where('id',$val['uid'])->value('mobile');

@@ -23,6 +23,7 @@ class Index extends IndexBase
         $time = time();
 
         foreach ($piglist as $key=>$val) {
+            $nowtime = date('H:i');
             //dump($val);
             //dump($nowtime<$val['start_time'] || $nowtime>$val['end_time']);
             if ($nowtime<$val['start_time']) {
@@ -35,6 +36,7 @@ class Index extends IndexBase
 
             }elseif ($nowtime>=$val['start_time'] && $nowtime<=$val['end_time']) {
               //  echo 'open';
+
                     $nowtime = date('H:i',time()-10*60);
                      if($nowtime<=$val['start_time']){
                          $is_open = Cache::get('is_open'.$val['id']."_".$this->user_id);
@@ -198,6 +200,7 @@ class Index extends IndexBase
     }
 
     public function checkA(){
+        return true;
       $uid = $this->user_id;
       $zMap = [];
       $zMap['id'] = $uid;
@@ -244,7 +247,7 @@ class Index extends IndexBase
         $map['create_time'] = ['gt',$today];
         $alread_res = Db::name('yuyue')->where($map)->find();
         if($alread_res){
-            $this->error('您今天已经抢到一个'.$pigInfo['name'].'了，明天再来哦');
+            //$this->error('您今天已经抢到一个'.$pigInfo['name'].'了，明天再来哦');
         }
 
         $map = [];
@@ -381,9 +384,10 @@ class Index extends IndexBase
                     ->update([
                         'status' => 1,
                         'uid' => $uid,
-                        'sell_id' => $val['uid'],
+                        //'sell_id' => $val['uid'],
                         'create_time' => time()
                     ]);
+
                 //改变用户猪的状态
                 Db::name('user_pigs')->where('id', $val['id'])->setField('status', 3);
                 //改变预约状态
