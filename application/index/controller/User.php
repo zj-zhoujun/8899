@@ -435,7 +435,7 @@ class User extends IndexBase
                 $this->error('数据不存在或宠物状态不可出售！');
             }
             //检测对应的猪的级别
-            $pigInfo = model('Pig')->where(['id'=>$info['pid']])->find();
+            $pigInfo = model('Pig')->where(['id'=>$info['pig_id']])->find();
 
             if($pigInfo['max_price']<$data['data']['number'] || $pigInfo['min_price']>$data['data']['number']){
                 $this->error('请输入'.$pigInfo['name'].'的出售区间'.$pigInfo['min_price'].'--'.$pigInfo['max_price']);
@@ -523,7 +523,7 @@ class User extends IndexBase
 
         $uid = $this->user_id;
         //待转让
-        $userPigs = Db::name('pig_order')->where(['uid'=>$this->user_id,'status'=>0])->order('id','desc')->select();
+        $userPigs = Db::name('pig_order')->where(['sell_id'=>$this->user_id,'status'=>0])->order('id','desc')->select();
         foreach ($userPigs as $k=>$v) {
 
             $userPigs[$k]['pig_info'] = Db::name('task_config')->where('id',$v['pig_id'])->find();
