@@ -394,7 +394,7 @@ class Plan extends Controller
             }
             $health_time = $v['health_time']?:$v['create_time'];
             $next_time = $health_time+86400*$health_cycle;
-            if($next_time){
+            if($next_time>=time()){
                 Db::name('user_pigs')->where('id',$v['id'])->update(['health'=>1,'health_time'=>time()]);
                 Db::name('pig_order')->where('id',$v['order_id'])->update(['health'=>1]);
             }
