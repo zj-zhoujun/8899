@@ -270,7 +270,13 @@ class Shop extends AdminBase
         if($type){
             $map['type']=$type;
         }
-        $list=Db::name('tixian')->where($map)->paginate(12,false,['query'=>$this->request->param()]);
+        $list=Db::name('tixian')
+            ->alias('t')
+            ->join('user_payment u','t.bank_id=u.id')
+            ->where($map)
+            ->order('t.id desc')
+            ->field('t.*,u.account,u.type,u.bank_name,u.name,u.qrcode_url')
+            ->paginate(12,false,['query'=>$this->request->param()]);
         $this->assign('list',$list);
         $this->assign('page',$list->render());
         return $this->fetch();

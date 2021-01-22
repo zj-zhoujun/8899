@@ -47,14 +47,14 @@
       <div class="page-bd">
         <!-- 页面内容 -->
         <div class="fromBox">
-          <div class="weui-cells__title fs28 color_3 fw_b">ALL钱包地址</div>
-            <div class="weui-cells weui-cells_form">
-              <div class="weui-cell">
-                <div class="weui-cell__bd">
-                  <input class="weui-input fs28 fw_b wallet_address" type="text" placeholder="请输入ALL钱包地址" value=""/>
-                </div>
-              </div>
-            </div>
+          <!--<div class="weui-cells__title fs28 color_3 fw_b">ALL钱包地址</div>-->
+            <!--<div class="weui-cells weui-cells_form">-->
+              <!--<div class="weui-cell">-->
+                <!--<div class="weui-cell__bd">-->
+                  <!--<input class="weui-input fs28 fw_b wallet_address" type="text" placeholder="请输入ALL钱包地址" value=""/>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
             <div class="weui-cells__title  fs28 color_3 fw_b">提取数量</div>
             <div class="weui-cells weui-cells_form">
               <div class="weui-cell">
@@ -111,14 +111,14 @@
         data.number   = $('.number').val();
         data.wallet_address   = $('.wallet_address').val();
         data.bank_id = $('.bank_id').val();
-        if (!data.wallet_address) {
-            layer.open({
-                content: '请输入ALL钱包地址'
-                ,skin: 'msg'
-                ,time: 1 //2秒后自动关闭
-            });
-            return false;
-        }
+//        if (!data.wallet_address) {
+//            layer.open({
+//                content: '请输入ALL钱包地址'
+//                ,skin: 'msg'
+//                ,time: 1 //2秒后自动关闭
+//            });
+//            return false;
+//        }
         if (!data.number) {
             layer.open({
                 content: '请输入提取数量'

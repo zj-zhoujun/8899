@@ -115,7 +115,7 @@ class User extends IndexBase
             $saveDate['uid'] = $this->user_id;
             $saveDate['mobile'] = $this->user['mobile'];
             $saveDate['currency'] = 'wia';
-            $saveDate['wallet_address'] = $data['data']['wallet_address'];
+            //$saveDate['wallet_address'] = $data['data']['wallet_address'];
             $saveDate['num'] = $data['data']['number'];
             $saveDate['tx_rate']  = $config['pig_sxf'];
             $saveDate['sxf'] = $saveDate['num']*$config['pig_sxf']/100;
@@ -124,7 +124,7 @@ class User extends IndexBase
             $saveDate['bank_id'] = $data['data']['bank_id'];
             $re = Db::name('tixian')->insert($saveDate);
             if ($re) {
-                moneyLog($this->user_id,$this->user_id,'wia',-$saveDate['num'],7,'wia提币');
+                moneyLog($this->user_id,$this->user_id,'pig',-$saveDate['num'],7,'收益提现');
                 $this->success('操作成功，待系统确认');
             } else {
                 $this->error('操作失败');
