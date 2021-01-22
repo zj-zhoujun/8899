@@ -73,7 +73,7 @@ class User extends Model
             $saveDate['cycle'] = $pigInfo['cycle'];
             $saveDate['doge'] = $pigInfo['doge'];
             $saveDate['pig_no'] = create_trade_no();
-            $saveDate['status'] = 1;
+            $saveDate['status'] = 0;
             $saveDate['create_time'] = time();
             $saveDate['end_time'] = time()+$pigInfo['cycle']*24*3600;
             $sell_id = Db::name('user_pigs')->insertGetId($saveDate);

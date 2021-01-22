@@ -54,56 +54,56 @@
             <!-- <div class="fs26">收益状态：<span class="fw_b ">等待收益</span></div> -->
         </div>
         <div class="hidden">
-            <div class="makeOverPay">
-                <p class="fs30 fw_b color_3">转让方收款账号</p> {volist name="payment" id="val"} {eq name="val.type" value="2"}
-                <div class="payBox">
-                    <img src="/public/static/index/assets/images/weixinpay.png" alt="" />
-                    <div>
-                        <div class="fs26">
-                            账户名称：
-                            <span>{$val.name}</span>
-                        </div>
-                        <div class="fs26">
-                            账户号：
-                            <span>{$val.account}</span>
-                        </div>
-                        <div class="fs26">
-                            账户类型：
-                            <span>微信支付</span>
-                        </div>
-                    </div>
-                </div> {/eq} {eq name="val.type" value="1"}
-                <div class="payBox">
-                    <img src="/public/static/index/assets/images/alipay.png" alt="" />
-                    <div>
-                        <div class="fs26">
-                            账户名称：
-                            <span>{$val.name}</span>
-                        </div>
-                        <div class="fs26">
-                            账户号：
-                            <span>{$val.account}</span>
-                        </div>
-                        <div class="fs26">
-                            账户类型：
-                            <span>支付宝支付</span>
-                        </div>
-                    </div>
-                </div> {/eq}
-            </div> {/volist}
+            <!--<div class="makeOverPay">-->
+                <!--<p class="fs30 fw_b color_3">转让方收款账号</p> {volist name="payment" id="val"} {eq name="val.type" value="2"}-->
+                <!--<div class="payBox">-->
+                    <!--<img src="/public/static/index/assets/images/weixinpay.png" alt="" />-->
+                    <!--<div>-->
+                        <!--<div class="fs26">-->
+                            <!--账户名称：-->
+                            <!--<span>{$val.name}</span>-->
+                        <!--</div>-->
+                        <!--<div class="fs26">-->
+                            <!--账户号：-->
+                            <!--<span>{$val.account}</span>-->
+                        <!--</div>-->
+                        <!--<div class="fs26">-->
+                            <!--账户类型：-->
+                            <!--<span>微信支付</span>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div> {/eq} {eq name="val.type" value="1"}-->
+                <!--<div class="payBox">-->
+                    <!--<img src="/public/static/index/assets/images/alipay.png" alt="" />-->
+                    <!--<div>-->
+                        <!--<div class="fs26">-->
+                            <!--账户名称：-->
+                            <!--<span>{$val.name}</span>-->
+                        <!--</div>-->
+                        <!--<div class="fs26">-->
+                            <!--账户号：-->
+                            <!--<span>{$val.account}</span>-->
+                        <!--</div>-->
+                        <!--<div class="fs26">-->
+                            <!--账户类型：-->
+                            <!--<span>支付宝支付</span>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div> {/eq}-->
+            <!--</div> {/volist}-->
             <div class="fromBox">
                 <div class="weui-cells weui-cells_form">
-                    <div class="weui-cells__title  fs28 color_3 fw_b" style="padding-left:0">
-                        付款凭证
-                    </div>
-                    <div class="weui-cells weui-cells_form">
-                        <div class="weui-cell fileBox" style="padding-left: 0px">
-                            <div class="weui-cell__bd">
-                                <img src="{$detail.voucher}" width="335px" style="height: 2.333333rem;" id="img" onclick="show()" />
-                                <!-- <input id="uploaderInput" class="weui-uploader__input imgs" type="file" accept="image/*" /> -->
-                            </div>
-                        </div>
-                    </div>
+                    <!--<div class="weui-cells__title  fs28 color_3 fw_b" style="padding-left:0">-->
+                        <!--付款凭证-->
+                    <!--</div>-->
+                    <!--<div class="weui-cells weui-cells_form">-->
+                        <!--<div class="weui-cell fileBox" style="padding-left: 0px">-->
+                            <!--<div class="weui-cell__bd">-->
+                                <!--<img src="{$detail.voucher}" width="335px" style="height: 2.333333rem;" id="img" onclick="show()" />-->
+                                <!--&lt;!&ndash; <input id="uploaderInput" class="weui-uploader__input imgs" type="file" accept="image/*" /> &ndash;&gt;-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
                     <div class="hide">
                         <div class="weui-cells__title  fs28 color_3 fw_b" style="padding-left:0">
                             二级密码

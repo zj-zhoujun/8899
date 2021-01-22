@@ -18,8 +18,9 @@ class PigOrder extends Model
         $re = $this->where('id',$id)
             ->setField([
                 'status'=>0,
-                'uid' => $orderInfo['sell_id'],
-                'sell_id' => 0
+                'uid' => 0,
+                'is_lock'=>0
+                //'sell_id' => 0
             ]);
         return $re ? true : false;
     }
@@ -27,7 +28,7 @@ class PigOrder extends Model
     {
         $re =$this
             ->where('id',$id)
-            ->setField(['status'=>3,'update_time'=>time()]);
+            ->setField(['status'=>3,'update_time'=>time(),'is_lock'=>0]);
         if($re){
 
             $orderInfo = $this->find($id);
