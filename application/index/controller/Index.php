@@ -146,11 +146,13 @@ class Index extends IndexBase
         $insertData['buy_type'] = 0;
 
         $insertData['pay_points'] = $pigInfo['pay_points'];
+        $insertData['pay_doge'] = $pigInfo['yuyue_doge'];
         $this->checkA();
         $re = Db::name('yuyue')->insert($insertData);
         if ($re) {
             //减少电力
             moneyLog($this->user_id,0,'pay_points',-$pigInfo['pay_points'],3,'预约矿场');
+            moneyLog($this->user_id,0,'doge',-$pigInfo['yuyue_doge'],3,'预约矿场');
             $this->success('预约成功');
 
         }else {
@@ -234,9 +236,10 @@ class Index extends IndexBase
             $this->error('您库存的矿场超过最大限额，请等待成熟转让后再来抢哦');
         }
         //不同品种的宠物同时只能存在两只
-        $pig_group = Db::name('pig_order')->where(['uid'=>$this->user_id])->group('pig_id')->count();
-        if($pig_group>=2){
-            $this->error('不同品种宠物只能同时拥有两只');
+        $pig_group = Db::name('user_pigs')->where(['uid'=>$this->user_id,'pig_id'=>$pig_id,'status'=>['in',[0,1]]])->count();
+        $pig_order_count = Db::name('pig_order')->where(['uid'=>$this->user_id,'pig_id'=>$pig_id,'status'=>['in',[0,1,2]]])->count();
+        if($pig_group>=1 || $pig_order_count>=1){
+            $this->error('已领养该品种宠物');
         }
 
         $today = strtotime(date('Y-m-d'));
@@ -279,14 +282,6 @@ class Index extends IndexBase
             $insertData['pay_doge'] = $pigInfo['qiang_doge'];
             $re = Db::name('yuyue')->insert($insertData);
             if ($re) {
-                //减少电力
-                if($pigInfo['qiang_points']>0){
-                    moneyLog($this->user_id,0,'pay_points',-$pigInfo['qiang_points'],3,'抢购矿场');
-                }
-                if($pigInfo['qiang_doge']>0){
-                    moneyLog($this->user_id,0,'doge',-$pigInfo['qiang_doge'],3,'抢购矿场');
-                }
-
                 $this->success('进入抢购成功');
 
             }else {
@@ -301,6 +296,7 @@ class Index extends IndexBase
             //已经预约的，修改bug_type为2
             $re = Db::name('yuyue')->insert($insertData);
             Db::name('yuyue')->where($map)->update(['buy_type'=>2]);
+
             $this->success('进入抢购成功');
         }else{
             $this->success('进入抢购成功');
@@ -392,6 +388,13 @@ class Index extends IndexBase
                 Db::name('user_pigs')->where('id', $val['id'])->setField('status', 3);
                 //改变预约状态
                 Db::name('yuyue')->where('uid', $uid)->where($userMap)->setField('status', 1);
+                //减少电力
+                if($pigInfo['qiang_points']>0){
+                    moneyLog($this->user_id,0,'pay_points',-$pigInfo['qiang_points'],3,'抢购矿场');
+                }
+                if($pigInfo['qiang_doge']>0){
+                    moneyLog($this->user_id,0,'doge',-$pigInfo['qiang_doge'],3,'抢购矿场');
+                }
                 return 1;
             }
         }
