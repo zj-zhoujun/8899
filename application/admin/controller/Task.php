@@ -256,8 +256,6 @@ class Task extends AdminBase
           }
           if (!empty($data['status']) && $data['status']!='') {
               $map['status'] = $data['status'];
-          }else{
-              $map['status'] = ['gt',0];
           }
           $orderlist = Db::name('pig_order')
               ->where($map)

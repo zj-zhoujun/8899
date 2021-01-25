@@ -94,7 +94,7 @@ class User extends IndexBase
     {
         $map = [];
         $map['user_id'] = $this->user_id;
-        $map['currency'] = 'wia';
+        $map['currency'] = 'pig';
         $list = Db::name('money_log')->where($map)->select();
         return view()->assign(['piglist'=>$list]);
     }
@@ -593,7 +593,7 @@ class User extends IndexBase
             //dump($data);
             $paypwd = $data['data']['paypwd'];
             if (md5($paypwd.config('salt')) != $this->user['pay_password']) {
-                $this->error('二级密码不正确');
+                //$this->error('二级密码不正确');
             }
 //           $re = Db::name('pig_order')
 //               ->where('id',$data['data']['order_id'])

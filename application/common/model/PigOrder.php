@@ -68,6 +68,8 @@ class PigOrder extends Model
             //moneyLog($orderInfo['uid'],0,'pig',$pigInfo['pig'],9,'买入奖励wia');
 
             //奖金记录
+            //dump($pigInfo['price']);exit;
+            moneyLog($orderInfo['sell_id'],0,'pig',$orderInfo['price'],9,'卖出宠物');
             addReward($orderInfo['sell_id'],0,'pig',$orderInfo['price'],5,'交易奖励wia');
             return true;
         } else{

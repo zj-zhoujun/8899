@@ -37,6 +37,7 @@
                     <div class="layui-input-inline">
                         <select name="status" id="">
                             <option value="">请选择</option>
+                            <option value="0" {eq name="0" value="$Think.request.status"}selected{/eq}>未抢</option>
                             <option value="1" {eq name="1" value="$Think.request.status"}selected{/eq}>待付款</option>
                             <option value="2" {eq name="2" value="$Think.request.status"}selected{/eq}>已付款</option>
                             <option value="3" {eq name="3" value="$Think.request.status"}selected{/eq}>已完成</option>
@@ -83,6 +84,7 @@
                         <td><img src="{$vo.voucher}" alt="" style="width: 60px;height: 40px" onclick="previewImg(this)"></td>
                         <td>
                             {switch name="$vo.status"}
+                            {case value="0"}未抢</a>{/case}
                             {case value="1"}未付款</a>{/case}
                             {case value="2"}已付款{/case}
                             {case value="3"}已完成{/case}
