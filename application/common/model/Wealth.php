@@ -21,7 +21,7 @@ class Wealth extends Model
             'zc_integral' => '收益转存',
             'contract_revenue' => '智能合约',
             'wia' => 'WIA币',
-            'pig' => 'WIA币',
+            'pig' => '我的收益',
             'doge'=>'DOGE币'
         ];
         return $currency[$value];

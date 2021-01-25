@@ -355,6 +355,7 @@ class Index extends IndexBase
         $pigMap = [];
         $pigMap['pig_id'] = $pigInfo['id'];
         $pigMap['status'] = 0;
+        $pigMap['sell_id'] = ['neq',$this->user_id];
         $piglist = Db::name('pig_order')->where($pigMap)->select();
 
         //查询预约的人

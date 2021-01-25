@@ -474,6 +474,7 @@ class Task extends AdminBase
         $saveDate['doge'] = $pigInfo['doge'];
         $saveDate['pig_no'] = create_trade_no();
         $saveDate['status'] = 2;
+        $saveDate['sell_time'] = time();
         $saveDate['create_time'] = time();
         $saveDate['end_time'] = time();
         $sell_id = Db::name('user_pigs')->insertGetId($saveDate);

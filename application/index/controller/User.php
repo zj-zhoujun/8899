@@ -438,7 +438,6 @@ class User extends IndexBase
             }
             //检测对应的猪的级别
             $pigInfo = model('Pig')->where(['id'=>$info['pig_id']])->find();
-
             if($pigInfo['max_price']<$data['data']['number'] || $pigInfo['min_price']>$data['data']['number']){
                 $this->error('请输入'.$pigInfo['name'].'的出售区间'.$pigInfo['min_price'].'--'.$pigInfo['max_price']);
             }
@@ -447,27 +446,15 @@ class User extends IndexBase
                 //扣減库存
                 model('Pig')->where(['id'=>['eq',$pigInfo['id']], 'selled_stock'=>['lt', $pigInfo['max_stock']]])->setInc('selled_stock');
                 //dump($pigInfo);
-                $rs = Db::name('user_pigs')->where('id',$id)->update(['status'=>2]);
                 //生成订单
-                $sellOrder = [];
-                $sellOrder['order_no'] = create_trade_no();
-                $sellOrder['uid'] = 0;
-                $sellOrder['pig_id'] = $pigInfo['id'];
-                $sellOrder['source_price'] = $data['data']['number'];
-                $sellOrder['price'] = $data['data']['number'];
-                $sellOrder['pig_name'] = $pigInfo['name'];
-                $sellOrder['create_time'] = time();
-                $sellOrder['sell_id'] = $this->user_id;
-                $order_id = Db::name('PigOrder')->insertGetId($sellOrder);
-                if ($rs && $order_id) {
-                    //更新用户猪对应的订单号
-                    Db::name('user_pigs')->where('id',$id)->update(['sell_time'=>time(),'status'=>2]);
-                    //推广收益减少记录
-                   // moneyLog($this->user_id,$this->user_id,$sharetype,-$saveDate['price'],2,'售出'.$sharetypename);
-                    $this->success('出售成功');
-                } else {
-                    $this->error('出售失败');
-                }
+                $pig_order = Db::name('pig_order')->where('id',$info['order_id'])->find();
+
+                //更新用户猪对应的订单号
+                Db::name('user_pigs')->where('id',$id)->update(['sell_time'=>time(),'status'=>3]);
+                //推广收益减少记录
+               // moneyLog($this->user_id,$this->user_id,$sharetype,-$saveDate['price'],2,'售出'.$sharetypename);
+                moneyLog($this->user_id,0,'pig',$pig_order['price'],9,'卖出宠物本金');
+                $this->success('出售成功');
             } else {
                 $this->error('出售失败,库存不足');
             }
