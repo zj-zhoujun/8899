@@ -208,9 +208,9 @@ class Plan extends Controller
             //增加猪的价值
             //model('Pig')->pigUpgarde($val['id'], $contract_revenue);
             Db::name('user_pigs')->where('id',$val['id'])->setField('status',1);
-            $this->addReward($val['uid'], 0, 'doge', $doge, 5, 'DOGE收益');
-            moneyLog($val['uid'], 0, 'doge', $doge, 6, 'DOGE收益');
-            moneyLog($val['uid'], 0, 'pig', $contract_revenue, 6, '宠物收益');
+            $this->addReward($val['uid'], 0, 'doge', $doge, 5, '狗币收益');
+            //moneyLog($val['uid'], 0, 'doge', $doge, 6, 'DOGE收益');
+            //moneyLog($val['uid'], 0, 'pig', $contract_revenue, 6, '宠物收益');
             //上级分成
             $parents = $this->threeParents($val['uid']);
             if ($parents['pid'] > 0) {

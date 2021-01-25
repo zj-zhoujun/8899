@@ -428,7 +428,7 @@ class User extends IndexBase
             if (md5($data['data']['paypwd'].config('salt')) != $this->user['pay_password']) $this->error('二级密码不正确');
 
             //数目检测
-            if ($data['data']['number']<=0 || !is_numeric($data['data']['number'])) $this->error('数目不合法');
+            //if ($data['data']['number']<=0 || !is_numeric($data['data']['number'])) $this->error('数目不合法');
 
 
             $id = $data['data']['pid']?:0;
@@ -439,7 +439,7 @@ class User extends IndexBase
             //检测对应的猪的级别
             $pigInfo = model('Pig')->where(['id'=>$info['pig_id']])->find();
             if($pigInfo['max_price']<$data['data']['number'] || $pigInfo['min_price']>$data['data']['number']){
-                $this->error('请输入'.$pigInfo['name'].'的出售区间'.$pigInfo['min_price'].'--'.$pigInfo['max_price']);
+                //$this->error('请输入'.$pigInfo['name'].'的出售区间'.$pigInfo['min_price'].'--'.$pigInfo['max_price']);
             }
 
             if($pigInfo['selled_stock'] < $pigInfo['max_stock'] ){
@@ -454,6 +454,16 @@ class User extends IndexBase
                 //推广收益减少记录
                // moneyLog($this->user_id,$this->user_id,$sharetype,-$saveDate['price'],2,'售出'.$sharetypename);
                 moneyLog($this->user_id,0,'pig',$pig_order['price'],9,'卖出宠物本金');
+                //发放收益
+                $pigReward = Db::name('task_config')->where('id', $info['pig_id'])->field('id,contract_revenue,doge')->find();
+                $contract_revenue = $pig_order['price'] * $pigReward['contract_revenue'] / 100;
+                $doge = $pig_order['price'] * $pigReward['doge'] / 100;
+                //累计收益
+                Db::name('user')->where('id', $this->user_id)->setInc('totalmoney', $contract_revenue);
+                //增加猪的价值
+                //model('Pig')->pigUpgarde($val['id'], $contract_revenue);
+                moneyLog($this->user_id, 0, 'doge', $doge, 6, '狗币收益');
+                moneyLog($this->user_id, 0, 'pig', $contract_revenue, 6, '宠物收益');
                 $this->success('出售成功');
             } else {
                 $this->error('出售失败,库存不足');
@@ -463,10 +473,17 @@ class User extends IndexBase
         $piglist = Db::name('user_pigs')
             ->alias('u')
             ->join('task_config t','u.pig_id=t.id')
+            ->join('pig_order o','u.order_id=o.id')
             ->where(['u.uid'=>$this->user_id,'u.status'=>1])
-            ->field('u.id,t.name,t.min_price,t.max_price,t.start_time,t.end_time')
+            ->field('u.id,o.price,t.name,t.min_price,t.max_price,t.start_time,t.end_time,t.contract_revenue,t.doge')
             ->select();
-        return view()->assign(['piglist'=>$piglist]);
+        foreach($piglist as $k=>$v){
+            $piglist[$k]['doge'] = $v['price'] * $v['doge'] / 100;
+            $piglist[$k]['pig'] = $v['price'] * $v['contract_revenue'] / 100;
+        }
+        $this->assign('piglist',$piglist);
+
+        return $this->fetch();
     }
 
     /**
@@ -480,7 +497,7 @@ class User extends IndexBase
         $time = time();
 
         $uid = $this->user_id;
-        $adoptLog = Db::name('pig_order')->where(['uid'=>$uid])->order('id','desc')->select();
+        $adoptLog = Db::name('pig_order')->where(['uid'=>$uid,'status'=>['neq',3]])->order('id','desc')->select();
         //$user
         foreach ($adoptLog as $key=>$val) {
             $adoptLog[$key]['pig_info'] = Db::name('task_config')->where('id',$val['pig_id'])->find();
