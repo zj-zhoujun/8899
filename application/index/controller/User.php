@@ -448,7 +448,7 @@ class User extends IndexBase
                 //dump($pigInfo);
                 //生成订单
                 $pig_order = Db::name('pig_order')->where('id',$info['order_id'])->find();
-
+                Db::name('pig_order')->where('id',$info['order_id'])->update(['sell_time'=>time(),'sell_id'=>$this->user_id]);
                 //更新用户猪对应的订单号
                 Db::name('user_pigs')->where('id',$id)->update(['sell_time'=>time(),'status'=>3]);
                 //推广收益减少记录
@@ -497,7 +497,7 @@ class User extends IndexBase
         $time = time();
 
         $uid = $this->user_id;
-        $adoptLog = Db::name('pig_order')->where(['uid'=>$uid,'status'=>['neq',3]])->order('id','desc')->select();
+        $adoptLog = Db::name('pig_order')->where(['uid'=>$uid,'sell_id'=>0])->order('id','desc')->select();
         //$user
         foreach ($adoptLog as $key=>$val) {
             $adoptLog[$key]['pig_info'] = Db::name('task_config')->where('id',$val['pig_id'])->find();
@@ -505,6 +505,9 @@ class User extends IndexBase
                 $user_pig = Db::name('user_pigs')->where(['order_id'=>$val['id'],'uid'=>$uid])->find();
                 $adoptLog[$key]['user_pig'] = $user_pig;
                 $adoptLog[$key]['is_end'] = time()>$user_pig['end_time']?1:0;
+                if($adoptLog[$key]['is_end']==1){
+                    unset($adoptLog[$key]);
+                }
             }
         }
         //申诉记录;
@@ -514,7 +517,7 @@ class User extends IndexBase
 //        $wclist['uid'] = $uid;
 //        $wclist['status'] = 2;
 //        $wclist = Db::name('pig_info')->where($wcMap)->select();
-        return view()->assign(['loglist'=>$adoptLog,'sslist'=>$sslist,'time'=>$time,'cancel_time'=>$cancel_time]);
+        return view()->assign(['loglist'=>array_values($adoptLog),'sslist'=>$sslist,'time'=>$time,'cancel_time'=>$cancel_time]);
     }
 
     /**

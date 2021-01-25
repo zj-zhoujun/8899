@@ -95,9 +95,9 @@ class Pay extends controller
                 Db::name('pig_order')
                     ->where('id',$info['data_id'])
                     ->update(['status'=>2,'update_time'=>time()]);
-                Db::name('user_pigs')
-                    ->where('order_id',$info['data_id'])
-                    ->update(['status'=>1]);
+//                Db::name('user_pigs')
+//                    ->where('order_id',$info['data_id'])
+//                    ->update(['status'=>1]);
                 $log = [
                     'user_id' => $order_info['uid'],
                     'username' => model('User')->where('id', $info['uid'])->value('mobile'),
@@ -192,9 +192,9 @@ class Pay extends controller
                 Db::name('pig_order')
                     ->where('id',$info['data_id'])
                     ->update(['status'=>2,'update_time'=>time()]);
-                Db::name('user_pigs')
-                    ->where('order_id',$info['data_id'])
-                    ->update(['status'=>1]);
+//                Db::name('user_pigs')
+//                    ->where('order_id',$info['data_id'])
+//                    ->update(['status'=>1]);
                 $log = [
                     'user_id' => $order_info['uid'],
                     'username' => model('User')->where('id', $info['uid'])->value('mobile'),
