@@ -210,6 +210,7 @@ class Plan extends Controller
             Db::name('user_pigs')->where('id',$val['id'])->setField('status',1);
             $this->addReward($val['uid'], 0, 'doge', $doge, 5, 'DOGE收益');
             moneyLog($val['uid'], 0, 'doge', $doge, 6, 'DOGE收益');
+            moneyLog($val['uid'], 0, 'pig', $contract_revenue, 6, '宠物收益');
             //上级分成
             $parents = $this->threeParents($val['uid']);
             if ($parents['pid'] > 0) {
@@ -394,7 +395,7 @@ class Plan extends Controller
             }
             $health_time = $v['health_time']?:$v['create_time'];
             $next_time = $health_time+86400*$health_cycle;
-            if($next_time>=time()){
+            if(time()>=$next_time){
                 Db::name('user_pigs')->where('id',$v['id'])->update(['health'=>1,'health_time'=>time()]);
                 Db::name('pig_order')->where('id',$v['order_id'])->update(['health'=>1]);
             }

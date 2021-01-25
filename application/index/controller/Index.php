@@ -238,7 +238,7 @@ class Index extends IndexBase
         //不同品种的宠物同时只能存在两只
         $pig_group = Db::name('user_pigs')->where(['uid'=>$this->user_id,'pig_id'=>$pig_id,'status'=>['in',[0,1]]])->count();
         $pig_order_count = Db::name('pig_order')->where(['uid'=>$this->user_id,'pig_id'=>$pig_id,'status'=>['in',[0,1,2]]])->count();
-        if($pig_group>=1 || $pig_order_count>=1){
+        if($pig_group>=2 || $pig_order_count>=2){
             $this->error('已领养该品种宠物');
         }
 
